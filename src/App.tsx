@@ -1,7 +1,22 @@
+import {
+  SignedIn,
+  SignedOut,
+  SignIn,
+  UserButton,
+} from "@clerk/clerk-react";
+
 const App = () => {
   return (
-    <div>Hello World</div>
-  )
-}
+    <div>
+      <div>Hello World</div>
+      <SignedOut>
+        <SignIn />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+    </div>
+  );
+};
 
-export default App
+export default App;
