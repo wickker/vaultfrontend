@@ -1,9 +1,4 @@
-import {
-  SignedIn,
-  SignedOut,
-  SignIn,
-  UserButton,
-} from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignIn, UserButton } from '@clerk/clerk-react'
 
 const App = () => {
   return (
@@ -16,7 +11,7 @@ const App = () => {
         <UserButton />
       </SignedIn>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
