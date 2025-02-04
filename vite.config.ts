@@ -25,7 +25,7 @@ export default defineConfig(({ mode }: UserConfig) => {
           name: 'Vault',
           short_name: 'Vault',
           description: 'Simple password manager',
-          theme_color: '#e6e6e6',
+          theme_color: '#ffffff',
           icons: [
             {
               src: 'logo-x192.png',
