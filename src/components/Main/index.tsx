@@ -4,8 +4,10 @@ import { SignedIn, SignedOut, SignIn, SignOutButton } from '@clerk/react-router'
 const Main = () => {
   return (
     <>
-      {/* <div className='bg-[#e6e6e6] p-16 h-[512px] w-[512px]'>
-        <FaCottonBureau className='h-full w-full' />
+      {/* <div className='bg-pink-400 p-5'>
+        <div className='h-[512px] w-[512px] bg-white p-16'>
+          <FaCottonBureau className='h-full w-full' />
+        </div>
       </div>
       <br /> */}
       <SignedOut>
