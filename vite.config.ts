@@ -18,7 +18,7 @@ export default defineConfig(({ mode }: UserConfig) => {
       VitePWA({
         registerType: 'autoUpdate',
         devOptions: {
-          enabled: true
+          enabled: true,
         },
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'logo-x96.png'],
         manifest: {
@@ -30,15 +30,15 @@ export default defineConfig(({ mode }: UserConfig) => {
             {
               src: 'logo-x192.png',
               sizes: '192x192',
-              type: 'image/png'
+              type: 'image/png',
             },
             {
               src: 'logo-x512.png',
               sizes: '512x512',
-              type: 'image/png'
-            }
-          ]
-        }
+              type: 'image/png',
+            },
+          ],
+        },
       }),
     ],
     resolve: {

@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
 .app-font {
-    font-family: "Noto Sans", serif;
-    font-optical-sizing: auto;
+  font-family: 'Noto Sans', serif;
+  font-optical-sizing: auto;
 }
