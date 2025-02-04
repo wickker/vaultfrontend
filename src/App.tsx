@@ -10,17 +10,19 @@ if (!Config.VITE_CLERK_PUBLISHABLE_KEY) {
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <ClerkProvider
-        publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}
-        afterSignOutUrl='/'
-      >
-        <Routes>
-          <Route path='/' element={<Main />} />
-          <Route path='/item' element={<Item />} />
-        </Routes>
-      </ClerkProvider>
-    </BrowserRouter>
+    <div className='app-font'>
+      <BrowserRouter>
+        <ClerkProvider
+          publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}
+          afterSignOutUrl='/'
+        >
+          <Routes>
+            <Route path='/' element={<Main />} />
+            <Route path='/item' element={<Item />} />
+          </Routes>
+        </ClerkProvider>
+      </BrowserRouter>
+    </div>
   )
 }
 
