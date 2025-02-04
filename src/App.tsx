@@ -1,5 +1,6 @@
 import { ClerkProvider } from '@clerk/react-router'
 import { BrowserRouter, Routes, Route } from 'react-router'
+import { registerSW } from 'virtual:pwa-register'
 import Item from './components/Item'
 import Main from './components/Main'
 import Config from './configs'
@@ -9,6 +10,8 @@ if (!Config.VITE_CLERK_PUBLISHABLE_KEY) {
 }
 
 const App = () => {
+  registerSW({ immediate: true })
+
   return (
     <div className='app-font'>
       <BrowserRouter>

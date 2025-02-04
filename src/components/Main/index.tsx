@@ -10,7 +10,7 @@ const Main = () => {
         </div>
       </div>
       <br /> */}
-      <div>Hello World</div>
+      <div>Hello</div>
       <SignedOut>
         <SignIn />
       </SignedOut>
