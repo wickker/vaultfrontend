@@ -1,6 +1,11 @@
 @import 'tailwindcss';
 
-.app-font {
-  font-family: 'Noto Sans', serif;
-  font-optical-sizing: auto;
+@layer components {
+  .focus-visible-neutral {
+    @apply focus-visible:ring-2 focus-visible:ring-neutral-300 focus-visible:ring-offset-2 focus-visible:outline-none;
+  }
+}
+
+@theme {
+  --font-noto-sans: 'Noto Sans', serif;
 }

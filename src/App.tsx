@@ -13,7 +13,7 @@ const App = () => {
   registerSW({ immediate: true })
 
   return (
-    <div className='app-font'>
+    <div className='font-noto-sans'>
       <BrowserRouter>
         <ClerkProvider
           publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}

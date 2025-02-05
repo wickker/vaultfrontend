@@ -1,20 +1,18 @@
-import { SignedIn, SignedOut, SignIn, SignOutButton } from '@clerk/react-router'
+import { SignedIn, SignedOut, SignIn } from '@clerk/react-router'
 import { Page } from '@/components/commons'
 
 const Main = () => {
   return (
     <Page>
       <SignedOut>
-        <div className='flex h-full w-full justify-center items-center'>
+        <div className='flex h-full w-full items-center justify-center'>
           <SignIn />
           {/* TODO: Style button and input */}
         </div>
       </SignedOut>
 
       <SignedIn>
-        <SignOutButton>
-          <button>SIGN OUT</button>
-        </SignOutButton>
+        <div className='flex h-full w-full justify-center p-4'></div>
       </SignedIn>
     </Page>
   )
