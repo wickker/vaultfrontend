@@ -20,7 +20,7 @@ export default defineConfig(({ mode }: UserConfig) => {
         devOptions: {
           enabled: true,
         },
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'logo-x96.png'],
+        includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
         manifest: {
           name: 'Vault',
           short_name: 'Vault',

@@ -27,13 +27,13 @@ const Button = ({
   return (
     <button
       className={mc(
-        'focus-visible-neutral inline-flex h-fit w-fit items-center justify-center gap-x-2 rounded-md bg-[#2c2c2c] px-4 py-2 text-base whitespace-nowrap text-white hover:cursor-pointer hover:opacity-95 disabled:pointer-events-none disabled:opacity-50',
-        variant === ButtonVariant.DANGER && 'bg-[#dc2625]',
-        variant === ButtonVariant.SECONDARY && 'bg-[#e1e1e1] text-[#2c2c2c]',
+        'focus-visible-neutral inline-flex h-fit w-fit items-center justify-center gap-x-2 rounded-md bg-app-default px-4 py-2 text-base whitespace-nowrap text-white hover:cursor-pointer hover:opacity-95 disabled:pointer-events-none disabled:opacity-50',
+        variant === ButtonVariant.DANGER && 'bg-app-danger',
+        variant === ButtonVariant.SECONDARY && 'bg-app-secondary text-app-default',
         variant === ButtonVariant.OUTLINE &&
-          'border border-[#e7e7e9] bg-transparent text-[#2c2c2c]',
+          'border border-app-border bg-transparent text-app-default',
         variant === ButtonVariant.LINK &&
-          'bg-transparent text-[#2c2c2c] hover:underline',
+          'bg-transparent text-app-default hover:underline',
         className && className
       )}
       disabled={isDisabled}

@@ -7,5 +7,10 @@
 }
 
 @theme {
+  --color-app-background: #e5e5e5;
+  --color-app-border: #e7e7e9;
+  --color-app-danger: #dc2625;
+  --color-app-default: #2c2c2c;
+  --color-app-secondary: #e1e1e1;
   --font-noto-sans: 'Noto Sans', serif;
 }
