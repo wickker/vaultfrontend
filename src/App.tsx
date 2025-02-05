@@ -18,6 +18,8 @@ const App = () => {
         <ClerkProvider
           publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}
           afterSignOutUrl='/'
+          // signInUrl='/'
+          // signUpUrl='/'
         >
           <Routes>
             <Route path='/' element={<Main />} />
