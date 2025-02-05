@@ -1,16 +1,16 @@
 @import 'tailwindcss';
 
 @layer components {
-  .focus-visible-neutral {
+  .focus-visible-app {
     @apply focus-visible:ring-2 focus-visible:ring-neutral-300 focus-visible:ring-offset-2 focus-visible:outline-none;
   }
 }
 
 @theme {
   --color-app-background: #e5e5e5;
-  --color-app-border: #e7e7e9;
   --color-app-danger: #dc2625;
   --color-app-default: #2c2c2c;
   --color-app-secondary: #e1e1e1;
+
   --font-noto-sans: 'Noto Sans', serif;
 }

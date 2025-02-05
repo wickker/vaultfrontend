@@ -27,11 +27,11 @@ const Button = ({
   return (
     <button
       className={mc(
-        'focus-visible-neutral inline-flex h-fit w-fit items-center justify-center gap-x-2 rounded-md bg-app-default px-4 py-2 text-base whitespace-nowrap text-white hover:cursor-pointer hover:opacity-95 disabled:pointer-events-none disabled:opacity-50',
+        'focus-visible-app inline-flex h-fit w-fit items-center justify-center gap-x-2 rounded-md bg-app-default px-4 py-2 text-base whitespace-nowrap text-white hover:cursor-pointer hover:opacity-95 disabled:pointer-events-none disabled:opacity-50',
         variant === ButtonVariant.DANGER && 'bg-app-danger',
         variant === ButtonVariant.SECONDARY && 'bg-app-secondary text-app-default',
         variant === ButtonVariant.OUTLINE &&
-          'border border-app-border bg-transparent text-app-default',
+          'border border-neutral-300 bg-transparent text-app-default',
         variant === ButtonVariant.LINK &&
           'bg-transparent text-app-default hover:underline',
         className && className
