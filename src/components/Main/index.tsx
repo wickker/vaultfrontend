@@ -15,7 +15,7 @@ const Main = () => {
 
       <SignedIn>
         <Page>
-          <div className='h-full w-full bg-app-background p-4'>
+          <div className='bg-app-background h-full w-full p-4'>
             <Button>Test</Button>
           </div>
         </Page>
