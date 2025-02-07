@@ -1,11 +1,16 @@
-import Dashboard from '@/components/Dashboard'
-import Landing from '@/components/Landing'
+import { SignedOut, SignedIn } from '@clerk/react-router'
+import Dashboard from './Dashboard'
+import Login from './Login'
 
 const Main = () => {
   return (
     <>
-      <Landing />
-      <Dashboard />
+      <SignedOut>
+        <Login />
+      </SignedOut>
+      <SignedIn>
+        <Dashboard />
+      </SignedIn>
     </>
   )
 }
