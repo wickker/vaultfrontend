@@ -1,6 +1,16 @@
 @import 'tailwindcss';
 
-.app-font {
-  font-family: 'Noto Sans', serif;
-  font-optical-sizing: auto;
+@layer components {
+  .focus-visible-app {
+    @apply focus-visible:ring-2 focus-visible:ring-neutral-300 focus-visible:ring-offset-2 focus-visible:outline-none;
+  }
+}
+
+@theme {
+  --color-app-background: #f1f5f9;
+  --color-app-danger: #dc2625;
+  --color-app-default: #0f172c;
+  --color-app-secondary: #e2e8f1;
+
+  --font-noto-sans: 'Noto Sans', serif;
 }
