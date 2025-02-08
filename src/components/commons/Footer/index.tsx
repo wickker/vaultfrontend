@@ -20,7 +20,7 @@ const Footer = () => {
   const navigate = useNavigate()
 
   return (
-    <div className='flex items-center justify-around p-4 text-neutral-300'>
+    <div className='flex items-center justify-around p-4 text-slate-400'>
       {routes.map((route) => {
         const isSelected = location.pathname === route.path
 
@@ -31,6 +31,7 @@ const Footer = () => {
               isSelected && 'text-app-default'
             )}
             onClick={() => navigate(route.path)}
+            key={route.path}
           >
             {route.icon}
           </button>
