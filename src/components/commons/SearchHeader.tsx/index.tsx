@@ -39,9 +39,10 @@ const SearchHeader = ({ onSearchChange = () => {} }: SearchHeaderProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 250 }}
+          transition={{ duration: 0.25 }}
         >
           <Input value={searchValue} onChange={handleSearch} ref={inputRef} />
+
           <button className='hover:cursor-pointer' onClick={hideSearch}>
             <RxCross2 className='h-10 w-10' />
           </button>
@@ -50,9 +51,10 @@ const SearchHeader = ({ onSearchChange = () => {} }: SearchHeaderProps) => {
         <motion.div
           className='text-app-default bg-app-background flex items-center justify-between gap-x-3 p-6'
           exit={{ opacity: 0 }}
-          transition={{ duration: 250 }}
+          transition={{ duration: 0.25 }}
         >
           <h1 className='text-3xl'>Vault</h1>
+
           <button className='hover:cursor-pointer' onClick={showSearch}>
             <TbSearch className='h-8 w-8' />
           </button>
