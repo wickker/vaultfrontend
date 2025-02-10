@@ -35,7 +35,7 @@ const Avatar = ({ url = '', email = '', className }: AvatarProps) => {
       <img
         alt='Avatar'
         src={url}
-        className={mc('h-24 w-24 rounded-full', className && className)}
+        className={mc('h-24 w-24 rounded-full', className)}
       />
     )
   }
@@ -45,7 +45,7 @@ const Avatar = ({ url = '', email = '', className }: AvatarProps) => {
     <div
       className={mc(
         'flex h-24 w-24 items-center justify-center rounded-full text-app-default text-[36px]',
-        className && className
+      className
       )}
       style={{
         backgroundColor: bgColor
