@@ -44,11 +44,11 @@ const Avatar = ({ url = '', email = '', className }: AvatarProps) => {
   return (
     <div
       className={mc(
-        'flex h-24 w-24 items-center justify-center rounded-full text-app-default text-[36px]',
-      className
+        'text-app-default flex h-24 w-24 items-center justify-center rounded-full text-[36px]',
+        className
       )}
       style={{
-        backgroundColor: bgColor
+        backgroundColor: bgColor,
       }}
     >
       {email.substring(0, 1).toUpperCase()}

@@ -8,11 +8,11 @@
 
 @theme {
   /* slate-100 */
-  --color-app-background: #f1f5f9; 
+  --color-app-background: #f1f5f9;
   --color-app-danger: #dc2625;
   /* slate-900 */
-  --color-app-default: #0f172a; 
-   /* slate-200 */
+  --color-app-default: #0f172a;
+  /* slate-200 */
   --color-app-secondary: #e2e8f0;
 
   --font-noto-sans: 'Noto Sans', serif;
