@@ -1,4 +1,10 @@
 import { ClerkProvider } from '@clerk/clerk-react'
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { registerSW } from 'virtual:pwa-register'
 import Item from './components/Item'
@@ -14,20 +20,40 @@ if (!Config.VITE_CLERK_PUBLISHABLE_KEY) {
 const App = () => {
   registerSW({ immediate: true })
 
+  // TODO: Change this
+  const handleError = (err: Error) =>
+    console.log(err.message || JSON.stringify(err))
+
+  const client = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+    queryCache: new QueryCache({
+      onError: handleError,
+    }),
+    mutationCache: new MutationCache({
+      onError: handleError,
+    }),
+  })
+
   return (
     <div className='font-noto-sans'>
-      <BrowserRouter>
-        <ClerkProvider
-          publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}
-          afterSignOutUrl='/'
-        >
-          <Routes>
-            <Route path={R.DASHBOARD} element={<Main />} />
-            <Route path={R.ITEM} element={<Item />} />
-            <Route path={R.PROFILE} element={<Profile />} />
-          </Routes>
-        </ClerkProvider>
-      </BrowserRouter>
+      <QueryClientProvider client={client}>
+        <BrowserRouter>
+          <ClerkProvider
+            publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}
+            afterSignOutUrl='/'
+          >
+            <Routes>
+              <Route path={R.DASHBOARD} element={<Main />} />
+              <Route path={R.ITEM} element={<Item />} />
+              <Route path={R.PROFILE} element={<Profile />} />
+            </Routes>
+          </ClerkProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
     </div>
   )
 }
