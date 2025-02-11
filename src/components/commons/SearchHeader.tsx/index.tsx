@@ -7,9 +7,13 @@ import useDebounce from '@/hooks/useDebounce'
 
 type SearchHeaderProps = {
   onSearchChange: (s: string) => void
+  isSearchDisabled?: boolean
 }
 
-const SearchHeader = ({ onSearchChange = () => {} }: SearchHeaderProps) => {
+const SearchHeader = ({
+  onSearchChange = () => {},
+  isSearchDisabled = false,
+}: SearchHeaderProps) => {
   const [isSearchVisible, setIsSearchVisible] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
@@ -55,7 +59,11 @@ const SearchHeader = ({ onSearchChange = () => {} }: SearchHeaderProps) => {
         >
           <h1 className='text-3xl'>Vault</h1>
 
-          <button className='hover:cursor-pointer' onClick={showSearch}>
+          <button
+            className='hover:cursor-pointer'
+            onClick={showSearch}
+            disabled={isSearchDisabled}
+          >
             <TbSearch className='h-8 w-8' />
           </button>
         </motion.div>

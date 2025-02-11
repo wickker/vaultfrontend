@@ -44,7 +44,14 @@ const Dashboard = () => {
   }
 
   return (
-    <Page header={<SearchHeader onSearchChange={() => {}} />}>
+    <Page
+      header={
+        <SearchHeader
+          onSearchChange={() => {}}
+          isSearchDisabled={getItems.isFetching}
+        />
+      }
+    >
       {renderItems()}
     </Page>
   )
