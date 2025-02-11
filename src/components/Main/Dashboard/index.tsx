@@ -1,16 +1,14 @@
-import { useState } from 'react'
-import { Menu, Page, SearchHeader } from '@/components/commons'
+import { Page, SearchHeader } from '@/components/commons'
+import useItem from '@/hooks/queries/useItem'
 
 const Dashboard = () => {
-  const [isVisible, setIsVisible] = useState(false)
+  const { useGetItemsQuery } = useItem()
+  const getItems = useGetItemsQuery()
+  console.log(getItems.data)
 
   return (
     <Page header={<SearchHeader onSearchChange={() => {}} />}>
-      <div className='bg-app-background h-full w-full p-6'>
-        <button onClick={() => setIsVisible(true)}>Modal</button>
-      </div>
-
-      <Menu isVisible={isVisible} onClose={() => setIsVisible(false)} />
+      <div className='bg-app-background h-full w-full p-6'></div>
     </Page>
   )
 }
