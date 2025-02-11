@@ -4,6 +4,16 @@
   .focus-visible-app {
     @apply focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 focus-visible:outline-none;
   }
+
+  .scrollbar::-webkit-scrollbar {
+    @apply h-[4px] w-[4px];
+  }
+  .scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded-[8px] bg-[#e5e5e5];
+  }
+  .scrollbar::-webkit-scrollbar-track-piece {
+    @apply rounded-[8px] bg-transparent;
+  }
 }
 
 @theme {
