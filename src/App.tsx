@@ -1,4 +1,4 @@
-import { ClerkProvider } from '@clerk/react-router'
+import { ClerkProvider } from '@clerk/clerk-react'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { registerSW } from 'virtual:pwa-register'
 import Item from './components/Item'

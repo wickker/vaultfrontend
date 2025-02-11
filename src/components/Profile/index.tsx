@@ -1,4 +1,4 @@
-import { SignOutButton, useUser } from '@clerk/react-router'
+import { SignOutButton, useUser } from '@clerk/clerk-react'
 import { MdLogout } from 'react-icons/md'
 import { Avatar, Page } from '@/components/commons'
 
