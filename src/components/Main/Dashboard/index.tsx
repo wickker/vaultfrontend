@@ -7,9 +7,10 @@ const Dashboard = () => {
   return (
     <Page header={<SearchHeader onSearchChange={() => {}} />}>
       <div className='bg-app-background h-full w-full p-6'>
-        <button onClick={() => setIsVisible((prev) => !prev)}>Button</button>
+        <button onClick={() => setIsVisible(true)}>Modal</button>
       </div>
-      <Menu isVisible={isVisible} />
+
+      <Menu isVisible={isVisible} onClose={() => setIsVisible(false)} />
     </Page>
   )
 }

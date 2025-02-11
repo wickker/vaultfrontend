@@ -1,13 +1,23 @@
+import { MouseEvent, PropsWithChildren, useRef } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { createPortal } from 'react-dom'
+import { RxCross2 } from 'react-icons/rx'
+import useClickOutside from '@/hooks/useClickOutside'
 
 type MenuProps = {
   isVisible: boolean
-  onClose?: () => void
-  onSelect?: () => void
-}
+  onClose: () => void
+} & PropsWithChildren
 
-const Menu = ({ isVisible }: MenuProps) => {
+const Menu = ({ isVisible = false, onClose, children }: MenuProps) => {
+  const clickOutsideRef = useRef<HTMLDivElement>(null)
+  useClickOutside(clickOutsideRef, onClose)
+
+  const close = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    onClose()
+  }
+
   return (
     <>
       {createPortal(
@@ -22,11 +32,20 @@ const Menu = ({ isVisible }: MenuProps) => {
             >
               <div className='relative h-full w-md max-w-md bg-[rgba(0,0,0,0.7)]'>
                 <motion.div
-                  className='absolute bottom-0 h-[100px] w-full bg-amber-300 opacity-100'
+                  className='absolute bottom-0 h-fit w-full rounded-t-lg bg-white p-6 opacity-100'
                   initial={{ y: 100 }}
                   animate={{ y: 0 }}
                   transition={{ duration: 0.25, ease: 'linear' }}
-                ></motion.div>
+                  ref={clickOutsideRef}
+                >
+                  <div className='flex items-center justify-end'>
+                    <button className='text-app-default' onClick={close}>
+                      <RxCross2 className='h-8 w-8' />
+                    </button>
+                  </div>
+
+                  {children}
+                </motion.div>
               </div>
             </motion.div>
           )}
