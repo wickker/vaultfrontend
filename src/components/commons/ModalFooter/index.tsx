@@ -4,8 +4,8 @@ import { ButtonVariant } from '@/components/commons/Button/types'
 type ModalFooterProps = {
   onCancel: () => void
   onSave: () => void
-  isSaveDisabled: boolean
-  isSaveLoading: boolean
+  isSaveDisabled?: boolean
+  isSaveLoading?: boolean
 }
 
 const ModalFooter = ({

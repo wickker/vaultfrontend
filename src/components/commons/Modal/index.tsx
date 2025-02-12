@@ -26,7 +26,7 @@ const Modal = ({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
             >
-              <div className='grid w-md max-w-md grid-rows-[auto_1fr_auto] overflow-hidden bg-white'>
+              <div className='font-noto-sans grid w-md max-w-md grid-rows-[auto_1fr_auto] overflow-hidden bg-white'>
                 {header}
 
                 {children}

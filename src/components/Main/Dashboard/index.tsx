@@ -67,7 +67,10 @@ const Dashboard = () => {
         />
       </div>
 
-      <ItemModal isVisible={isModalVisible} />
+      <ItemModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+      />
     </Page>
   )
 }

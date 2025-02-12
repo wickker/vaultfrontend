@@ -7,7 +7,7 @@ type PageProps = {
   className?: string
 } & PropsWithChildren
 
-const Page = ({ children, header, className }: PageProps) => {
+const Page = ({ children, header = <div />, className }: PageProps) => {
   return (
     <div className='flex h-[100dvh] w-full justify-center'>
       <div
@@ -16,7 +16,7 @@ const Page = ({ children, header, className }: PageProps) => {
           className
         )}
       >
-        {header ? header : <div />}
+        {header}
         {children}
         <Footer />
       </div>
