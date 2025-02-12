@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
+import { BsTrash } from 'react-icons/bs'
 import { RxCross2 } from 'react-icons/rx'
 import { Item, ItemFormSchema } from '@/@types/items'
 import { FormItem, Input, Modal } from '@/components/commons'
@@ -76,8 +77,7 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
           <h1 className='text-3xl font-semibold'>{title}</h1>
           {item ? (
             <button className='hover:cursor-pointer' onClick={() => {}}>
-              {/* TODO: Add delete functionality */}
-              <RxCross2 className='h-9 w-9' />
+              <BsTrash className='text-app-danger h-7 w-7' />
             </button>
           ) : (
             <button className='hover:cursor-pointer' onClick={handleCancel}>

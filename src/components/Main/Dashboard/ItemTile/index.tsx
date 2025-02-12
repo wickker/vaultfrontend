@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { MouseEvent, useState } from 'react'
 import { DateTime } from 'luxon'
 import { FiEdit } from 'react-icons/fi'
 import { Item } from '@/@types/items'
@@ -12,6 +12,11 @@ type ItemTileProps = {
 const ItemTile = ({ item }: ItemTileProps) => {
   const [isUpdateItemModalVisible, setIsUpdateItemModalVisible] =
     useState(false)
+
+  const handleEdit = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    setIsUpdateItemModalVisible(true)
+  }
 
   return (
     <>
@@ -32,7 +37,7 @@ const ItemTile = ({ item }: ItemTileProps) => {
           </p>
         </div>
 
-        <button onClick={() => setIsUpdateItemModalVisible(true)}>
+        <button onClick={handleEdit}>
           <FiEdit className='h-6 w-6 text-slate-500' />
         </button>
       </div>
