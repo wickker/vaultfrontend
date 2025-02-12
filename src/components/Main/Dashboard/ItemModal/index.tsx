@@ -28,16 +28,32 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
     values: defaultValues,
   })
   const queryClient = useQueryClient()
-  const { useCreateItemMutation } = useItem()
+  const { useCreateItemMutation, useUpdateItemMutation } = useItem()
   const createItem = useCreateItemMutation(createItemSuccessCb)
+  const updateItem = useUpdateItemMutation(updateItemSuccessCb)
+  const title = item ? 'Update Item' : 'Add Item'
 
   function createItemSuccessCb() {
     queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_ITEMS })
     handleCancel()
   }
 
+  function updateItemSuccessCb(d: Item) {
+    queryClient.setQueryData(QUERY_KEYS.GET_ITEMS, (items: Array<Item>) =>
+      items.map((item) => (item.id === d.id ? { ...item, name: d.name } : item))
+    )
+    handleCancel()
+  }
+
   const handleSave = handleSubmit((d) => {
-    createItem.mutate(d.name)
+    if (!item) {
+      createItem.mutate(d.name)
+      return
+    }
+    updateItem.mutate({
+      id: item.id,
+      name: d.name,
+    })
   })
 
   const handleCancel = () => {
@@ -52,15 +68,22 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
         <ModalFooter
           onCancel={handleCancel}
           onSave={handleSave}
-          isSaveLoading={createItem.isPending}
+          isSaveLoading={createItem.isPending || updateItem.isPending}
         />
       }
       header={
         <div className='text-app-default flex items-center justify-between p-6'>
-          <h1 className='text-3xl font-semibold'>Add Item</h1>
-          <button className='hover:cursor-pointer' onClick={handleCancel}>
-            <RxCross2 className='h-9 w-9' />
-          </button>
+          <h1 className='text-3xl font-semibold'>{title}</h1>
+          {item ? (
+            <button className='hover:cursor-pointer' onClick={() => {}}>
+              {/* TODO: Add delete functionality */}
+              <RxCross2 className='h-9 w-9' />
+            </button>
+          ) : (
+            <button className='hover:cursor-pointer' onClick={handleCancel}>
+              <RxCross2 className='h-9 w-9' />
+            </button>
+          )}
         </div>
       }
     >

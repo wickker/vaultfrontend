@@ -1,6 +1,6 @@
 import { useAuth } from '@clerk/clerk-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Item } from '@/@types/items'
+import { Item, UpdateItemRequest } from '@/@types/items'
 import { vaultApi } from '@/services'
 import { QUERY_KEYS } from '@/utils/constants/queryKeys'
 
@@ -39,9 +39,9 @@ const useItem = () => {
       onSuccess,
     })
 
-  const useUpdateItemMutation = () =>
+  const useUpdateItemMutation = (onSuccess: (d: Item) => void) =>
     useMutation({
-      mutationFn: async (request: Item): Promise<Item> => {
+      mutationFn: async (request: UpdateItemRequest): Promise<Item> => {
         const res = await vaultApi.put(
           `${path}/${request.id}`,
           { name: request.name },
@@ -53,6 +53,7 @@ const useItem = () => {
         )
         return res.data
       },
+      onSuccess,
     })
 
   const useDeleteItemMutation = () =>
