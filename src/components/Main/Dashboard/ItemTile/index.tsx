@@ -23,7 +23,7 @@ const ItemTile = ({ name = '', date = '', onEdit }: ItemTileProps) => {
       </div>
 
       <button onClick={onEdit}>
-        <FiEdit className='h-6 w-6 text-slate-500' />
+        <FiEdit className='h-5 w-5 text-slate-500' />
       </button>
     </div>
   )
