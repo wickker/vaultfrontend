@@ -22,7 +22,7 @@ const useItem = () => {
       },
     })
 
-  const useCreateItemMutation = () =>
+  const useCreateItemMutation = (onSuccess: () => void) =>
     useMutation({
       mutationFn: async (name: string): Promise<Item> => {
         const res = await vaultApi.post(
@@ -36,6 +36,7 @@ const useItem = () => {
         )
         return res.data
       },
+      onSuccess,
     })
 
   const useUpdateItemMutation = () =>

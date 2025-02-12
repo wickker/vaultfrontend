@@ -1,6 +1,9 @@
 import { z } from 'zod'
 
 // Requests
+export const ItemFormSchema = z.object({
+  name: z.string().min(1),
+})
 
 // Responses
 export const ItemSchema = z.object({

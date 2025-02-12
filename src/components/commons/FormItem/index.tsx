@@ -8,11 +8,11 @@ type FormItemProps = {
 const FormItem = ({ label = '', error = '', children }: FormItemProps) => {
   return (
     <div className='flex flex-col'>
-      {label && <label className='text-app-default mb-1'>{label}</label>}
+      {label && <label className='text-app-default mb-[6px]'>{label}</label>}
 
       {children}
 
-      <p className='text-app-danger mt-1 h-[16px] text-xs'>{error}</p>
+      <p className='text-app-danger mt-[6px] h-[16px] text-xs'>{error}</p>
     </div>
   )
 }
