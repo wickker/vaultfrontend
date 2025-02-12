@@ -20,7 +20,7 @@ const Footer = () => {
   const navigate = useNavigate()
 
   return (
-    <div className='flex items-center justify-around p-4 text-slate-400'>
+    <div className='flex h-[52px] items-center justify-around p-4 text-slate-400'>
       {routes.map((route) => {
         const isSelected = location.pathname === route.path
 

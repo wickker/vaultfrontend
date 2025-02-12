@@ -1,11 +1,14 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { DateTime } from 'luxon'
+import { FaPlus } from 'react-icons/fa6'
 import { RiLoader4Line } from 'react-icons/ri'
+import ItemModal from './ItemModal'
 import ItemTile from './ItemTile'
-import { NoItemsYet, Page, SearchHeader } from '@/components/commons'
+import { Button, NoItemsYet, Page, SearchHeader } from '@/components/commons'
 import useItem from '@/hooks/queries/useItem'
 
 const Dashboard = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false)
   const { useGetItemsQuery } = useItem()
   const getItems = useGetItemsQuery()
   const hasItems = getItems.isSuccess && getItems.data.length > 0
@@ -51,8 +54,20 @@ const Dashboard = () => {
           isSearchDisabled={getItems.isFetching}
         />
       }
+      className='relative'
     >
       {renderItems()}
+
+      <div className='absolute right-0 bottom-[52px] p-6'>
+        <Button
+          icon={<FaPlus className='h-5 w-5' />}
+          className='rounded-full p-2'
+          onClick={() => setIsModalVisible(true)}
+          disabled={getItems.isFetching}
+        />
+      </div>
+
+      <ItemModal isVisible={isModalVisible} />
     </Page>
   )
 }

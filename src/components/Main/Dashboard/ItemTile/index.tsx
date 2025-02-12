@@ -9,7 +9,7 @@ type ItemTileProps = {
 
 const ItemTile = ({ name = '', date = '', onEdit }: ItemTileProps) => {
   return (
-    <div className='grid grid-cols-[auto_1fr_auto] items-start gap-x-3 rounded-md bg-white p-4'>
+    <div className='grid grid-cols-[auto_1fr_auto] items-center gap-x-3 rounded-md bg-white p-4'>
       <div
         className='h-12 w-12 rounded-md'
         style={{
@@ -23,7 +23,7 @@ const ItemTile = ({ name = '', date = '', onEdit }: ItemTileProps) => {
       </div>
 
       <button onClick={onEdit}>
-        <FiEdit className='h-5 w-5 text-slate-500' />
+        <FiEdit className='h-6 w-6 text-slate-500' />
       </button>
     </div>
   )

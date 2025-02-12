@@ -57,7 +57,7 @@ const SearchHeader = ({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
         >
-          <h1 className='text-3xl'>Vault</h1>
+          <h1 className='text-3xl font-semibold'>Vault</h1>
 
           <button
             className='hover:cursor-pointer'
