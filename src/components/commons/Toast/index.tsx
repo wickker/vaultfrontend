@@ -1,6 +1,6 @@
 import { AnimatePresence } from 'motion/react'
 import Tile from './Tile'
-import { useToastContext } from '@/contexts/useToastContext'
+import { useToastContext } from '@/contexts/useToastContext/context'
 
 const Toast = () => {
   const { toasts, toast } = useToastContext()

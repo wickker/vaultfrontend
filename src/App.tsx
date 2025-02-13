@@ -13,7 +13,7 @@ import Main from './components/Main'
 import Profile from './components/Profile'
 import Config from './configs'
 import ToastProvider from './contexts/useToastContext'
-import { useToastContext } from './contexts/useToastContext'
+import { useToastContext } from './contexts/useToastContext/context'
 import { Route as R } from './utils/constants/enums'
 
 if (!Config.VITE_CLERK_PUBLISHABLE_KEY) {
