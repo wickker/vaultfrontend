@@ -2,19 +2,21 @@ import { AnimatePresence, motion } from 'motion/react'
 import { createPortal } from 'react-dom'
 import { LiaTimesCircleSolid } from 'react-icons/lia'
 import { RxCross2 } from 'react-icons/rx'
-import Button from '../Button'
+import { Button } from '@/components/commons'
 
 type ModalConfirmDeleteProps = {
   isVisible: boolean
   text: string
   onClose: () => void
   onConfirm: () => void
+  isLoading?: boolean
 }
 const ModalConfirmDelete = ({
   isVisible = false,
   onClose,
   onConfirm,
   text = '',
+  isLoading = false,
 }: ModalConfirmDeleteProps) => {
   return (
     <>
@@ -46,7 +48,9 @@ const ModalConfirmDelete = ({
                     <Button variant='secondary' onClick={onClose}>
                       Cancel
                     </Button>
-                    <Button onClick={onConfirm}>Delete</Button>
+                    <Button onClick={onConfirm} isLoading={isLoading}>
+                      Delete
+                    </Button>
                   </div>
                 </div>
               </div>

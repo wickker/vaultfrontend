@@ -56,7 +56,7 @@ const useItem = () => {
       onSuccess,
     })
 
-  const useDeleteItemMutation = () =>
+  const useDeleteItemMutation = (onSuccess: () => void) =>
     useMutation({
       mutationFn: async (id: number): Promise<null> => {
         const res = await vaultApi.delete(`${path}/${id}`, {
@@ -66,6 +66,7 @@ const useItem = () => {
         })
         return res.data
       },
+      onSuccess,
     })
 
   return {

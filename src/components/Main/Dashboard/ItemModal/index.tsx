@@ -37,10 +37,23 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
     values: defaultValues,
   })
   const queryClient = useQueryClient()
-  const { useCreateItemMutation, useUpdateItemMutation } = useItem()
+  const {
+    useCreateItemMutation,
+    useUpdateItemMutation,
+    useDeleteItemMutation,
+  } = useItem()
   const createItem = useCreateItemMutation(createItemSuccessCb)
   const updateItem = useUpdateItemMutation(updateItemSuccessCb)
+  const deleteItem = useDeleteItemMutation(deleteItemSuccessCb)
   const title = item ? 'Update Item' : 'Add Item'
+
+  function deleteItemSuccessCb() {
+    queryClient.setQueryData(QUERY_KEYS.GET_ITEMS, (items: Array<Item>) =>
+      items.filter((i) => i.id !== item?.id)
+    )
+    setIsDeleteConfirmationVisible(false)
+    handleCancel()
+  }
 
   function createItemSuccessCb() {
     queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_ITEMS })
@@ -49,7 +62,7 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
 
   function updateItemSuccessCb(d: Item) {
     queryClient.setQueryData(QUERY_KEYS.GET_ITEMS, (items: Array<Item>) =>
-      items.map((item) => (item.id === d.id ? { ...item, name: d.name } : item))
+      items.map((i) => (i.id === d.id ? { ...i, name: d.name } : i))
     )
     handleCancel()
   }
@@ -108,12 +121,15 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
         </div>
       </Modal>
 
-      <ModalConfirmDelete
-        isVisible={isDeleteConfirmationVisible}
-        onConfirm={() => {}}
-        onClose={() => setIsDeleteConfirmationVisible(false)}
-        text='Do you really want to delete this item? All associated records will be deleted as well and this process cannot be undone.'
-      />
+      {item && (
+        <ModalConfirmDelete
+          isVisible={isDeleteConfirmationVisible}
+          onConfirm={() => deleteItem.mutate(item.id)}
+          onClose={() => setIsDeleteConfirmationVisible(false)}
+          text='Do you really want to delete this item? All associated records will be deleted as well and this process cannot be undone.'
+          isLoading={deleteItem.isPending}
+        />
+      )}
     </>
   )
 }

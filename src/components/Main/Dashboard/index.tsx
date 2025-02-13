@@ -49,7 +49,7 @@ const Dashboard = () => {
     >
       {renderItems()}
 
-      <div className='absolute right-0 bottom-[52px] p-6'>
+      <div className='absolute right-0 bottom-[52px] p-4'>
         <Button
           icon={<FaPlus className='h-5 w-5' />}
           className='rounded-full p-2'
