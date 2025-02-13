@@ -3,7 +3,6 @@ import { DateTime } from 'luxon'
 import { FiEdit } from 'react-icons/fi'
 import { Item } from '@/@types/items'
 import ItemModal from '@/components/Main/Dashboard/ItemModal'
-import { getRandomPastelColor } from '@/utils/functions/commons'
 
 type ItemTileProps = {
   item: Item
@@ -22,10 +21,10 @@ const ItemTile = ({ item }: ItemTileProps) => {
     <>
       <div className='grid grid-cols-[auto_1fr_auto] items-center gap-x-3 rounded-md bg-white p-4'>
         <div
-          className='h-12 w-12 rounded-md'
-          style={{
-            backgroundColor: getRandomPastelColor(),
-          }}
+          className='h-12 w-12 rounded-md bg-zinc-300'
+          //   style={{
+          //     backgroundColor: getRandomPastelColor(),
+          //   }}
         />
 
         <div className='flex w-0 min-w-full flex-col gap-y-0.5'>

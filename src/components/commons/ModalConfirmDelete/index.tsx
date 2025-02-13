@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { createPortal } from 'react-dom'
-import { LiaTimesCircleSolid } from 'react-icons/lia'
+import { RxCrossCircled } from 'react-icons/rx'
 import { RxCross2 } from 'react-icons/rx'
 import { Button } from '@/components/commons'
 
@@ -38,7 +38,7 @@ const ModalConfirmDelete = ({
                     </button>
                   </div>
 
-                  <LiaTimesCircleSolid className='text-app-danger mb-3 h-20 w-20' />
+                  <RxCrossCircled className='text-app-danger mb-3 h-20 w-20' />
                   <h1 className='mb-3 text-lg'>Are you sure?</h1>
                   <p className='mb-10 text-center text-sm text-slate-500'>
                     {text}

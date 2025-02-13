@@ -31,7 +31,7 @@ const Dashboard = () => {
     if (!hasItems) return <NoItemsYet />
 
     return (
-      <div className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto p-6'>
+      <div className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pt-6 pb-22'>
         {items}
       </div>
     )
@@ -49,7 +49,7 @@ const Dashboard = () => {
     >
       {renderItems()}
 
-      <div className='absolute right-0 bottom-[52px] p-4'>
+      <div className='absolute right-0 bottom-[52px] p-6'>
         <Button
           icon={<FaPlus className='h-5 w-5' />}
           className='rounded-full p-2'
