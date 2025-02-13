@@ -39,7 +39,7 @@ const SearchHeader = ({
     <AnimatePresence>
       {isSearchVisible ? (
         <motion.div
-          className='text-app-default bg-app-background flex items-center justify-between gap-x-3 p-6'
+          className='text-app-default bg-app-background flex h-[92px] items-center justify-between gap-x-3 p-6'
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -53,7 +53,7 @@ const SearchHeader = ({
         </motion.div>
       ) : (
         <motion.div
-          className='text-app-default bg-app-background flex items-center justify-between gap-x-3 p-6'
+          className='text-app-default bg-app-background flex h-[92px] items-center justify-between gap-x-3 p-6'
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
         >

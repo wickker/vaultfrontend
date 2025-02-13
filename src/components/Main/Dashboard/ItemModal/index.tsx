@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
@@ -37,6 +37,8 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
     values: defaultValues,
   })
   const queryClient = useQueryClient()
+  const firstInputRef = useRef<HTMLInputElement | null>(null)
+  const { ref, ...rest } = register('name')
   const {
     useCreateItemMutation,
     useUpdateItemMutation,
@@ -83,6 +85,10 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
     onClose()
   }
 
+  useEffect(() => {
+    if (isVisible && firstInputRef.current) firstInputRef.current.focus()
+  }, [isVisible])
+
   return (
     <>
       <Modal
@@ -115,7 +121,14 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
         <div className='flex flex-col p-6'>
           <form>
             <FormItem label='Name' error={errors.name?.message}>
-              <Input className='bg-app-background' {...register('name')} />
+              <Input
+                className='bg-app-background'
+                {...rest}
+                ref={(e) => {
+                  ref(e)
+                  firstInputRef.current = e
+                }}
+              />
             </FormItem>
           </form>
         </div>
