@@ -20,6 +20,7 @@ const useItem = () => {
         })
         return res.data
       },
+      retry: false,
     })
 
   const useCreateItemMutation = (onSuccess: () => void) =>
