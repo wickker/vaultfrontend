@@ -1,10 +1,16 @@
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { BsTrash } from 'react-icons/bs'
 import { RxCross2 } from 'react-icons/rx'
 import { Item, ItemFormSchema } from '@/@types/items'
-import { FormItem, Input, Modal } from '@/components/commons'
+import {
+  FormItem,
+  Input,
+  Modal,
+  ModalConfirmDelete,
+} from '@/components/commons'
 import ModalFooter from '@/components/commons/ModalFooter'
 import useItem from '@/hooks/queries/useItem'
 import { QUERY_KEYS } from '@/utils/constants/queryKeys'
@@ -16,6 +22,8 @@ type ItemModalProps = {
 }
 
 const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
+  const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] =
+    useState(false)
   const defaultValues = {
     name: item ? item.name : '',
   }
@@ -63,38 +71,50 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
   }
 
   return (
-    <Modal
-      isVisible={isVisible}
-      footer={
-        <ModalFooter
-          onCancel={handleCancel}
-          onSave={handleSave}
-          isSaveLoading={createItem.isPending || updateItem.isPending}
-        />
-      }
-      header={
-        <div className='text-app-default flex items-center justify-between p-6'>
-          <h1 className='text-3xl font-semibold'>{title}</h1>
-          {item ? (
-            <button className='hover:cursor-pointer' onClick={() => {}}>
-              <BsTrash className='text-app-danger h-7 w-7' />
-            </button>
-          ) : (
-            <button className='hover:cursor-pointer' onClick={handleCancel}>
-              <RxCross2 className='h-9 w-9' />
-            </button>
-          )}
+    <>
+      <Modal
+        isVisible={isVisible}
+        footer={
+          <ModalFooter
+            onCancel={handleCancel}
+            onSave={handleSave}
+            isSaveLoading={createItem.isPending || updateItem.isPending}
+          />
+        }
+        header={
+          <div className='text-app-default flex items-center justify-between p-6'>
+            <h1 className='text-3xl font-semibold'>{title}</h1>
+            {item ? (
+              <button
+                className='hover:cursor-pointer'
+                onClick={() => setIsDeleteConfirmationVisible(true)}
+              >
+                <BsTrash className='text-app-danger h-7 w-7' />
+              </button>
+            ) : (
+              <button className='hover:cursor-pointer' onClick={handleCancel}>
+                <RxCross2 className='h-9 w-9' />
+              </button>
+            )}
+          </div>
+        }
+      >
+        <div className='flex flex-col p-6'>
+          <form>
+            <FormItem label='Name' error={errors.name?.message}>
+              <Input className='bg-app-background' {...register('name')} />
+            </FormItem>
+          </form>
         </div>
-      }
-    >
-      <div className='flex flex-col p-6'>
-        <form>
-          <FormItem label='Name' error={errors.name?.message}>
-            <Input className='bg-app-background' {...register('name')} />
-          </FormItem>
-        </form>
-      </div>
-    </Modal>
+      </Modal>
+
+      <ModalConfirmDelete
+        isVisible={isDeleteConfirmationVisible}
+        onConfirm={() => {}}
+        onClose={() => setIsDeleteConfirmationVisible(false)}
+        text='Do you really want to delete this item? All associated records will be deleted as well and this process cannot be undone.'
+      />
+    </>
   )
 }
 

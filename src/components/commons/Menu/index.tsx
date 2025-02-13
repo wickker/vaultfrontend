@@ -30,7 +30,7 @@ const Menu = ({ isVisible = false, onClose, children }: MenuProps) => {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
             >
-              <div className='relative h-full w-md max-w-md bg-[rgba(0,0,0,0.7)]'>
+              <div className='font-noto-sans relative h-full w-md max-w-md bg-[rgba(0,0,0,0.7)]'>
                 <motion.div
                   className='absolute bottom-0 flex h-fit w-full flex-col rounded-t-lg bg-white p-6 opacity-100'
                   initial={{ y: 100 }}
