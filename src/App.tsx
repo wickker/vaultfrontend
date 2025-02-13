@@ -12,7 +12,8 @@ import Item from './components/Item'
 import Main from './components/Main'
 import Profile from './components/Profile'
 import Config from './configs'
-import ToastProvider from './contextProviders/toast'
+import ToastProvider from './contexts/useToastContext'
+import { useToastContext } from './contexts/useToastContext'
 import { Route as R } from './utils/constants/enums'
 
 if (!Config.VITE_CLERK_PUBLISHABLE_KEY) {
@@ -21,10 +22,10 @@ if (!Config.VITE_CLERK_PUBLISHABLE_KEY) {
 
 const App = () => {
   registerSW({ immediate: true })
+  const { toast } = useToastContext()
 
-  // TODO: Change this
   const handleError = (err: Error) =>
-    console.log(err.message || JSON.stringify(err))
+    toast.error(err.message || JSON.stringify(err))
 
   const client = new QueryClient({
     defaultOptions: {

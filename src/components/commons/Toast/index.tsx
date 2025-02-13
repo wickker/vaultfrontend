@@ -1,13 +1,13 @@
 import { AnimatePresence } from 'motion/react'
 import Tile from './Tile'
-import { useToastContext } from '@/contextProviders/toast/useToastContext'
+import { useToastContext } from '@/contexts/useToastContext'
 
 const Toast = () => {
   const { toasts, toast } = useToastContext()
 
   return (
     <div className='absolute top-0 flex w-full justify-center'>
-      <div className='font-noto-sans flex w-md max-w-md flex-col'>
+      <div className='font-noto-sans flex w-md max-w-md flex-col gap-y-2 p-6'>
         <AnimatePresence>
           {toasts.map((t) => (
             <Tile

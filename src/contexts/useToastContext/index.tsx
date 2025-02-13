@@ -1,6 +1,6 @@
 import { PropsWithChildren, useState } from 'react'
 import { nanoid } from 'nanoid'
-import { ToastContext } from './useToastContext'
+import { ToastContext } from '.'
 import { Toast, ToastPayload } from '@/components/commons/Toast/types'
 
 const ToastProvider = ({ children }: PropsWithChildren) => {
