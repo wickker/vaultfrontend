@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router'
 import { AppLocation } from '@/@types/commons'
 import { Item } from '@/@types/items'
 import { ItemModalProps } from '@/components/Main/Dashboard/ItemModal'
-import { RelativeRoute } from '@/utils/constants/enums'
+import { RelativeRoute, Route } from '@/utils/constants/enums'
 
 type ItemTileProps = {
   item: Item
@@ -25,7 +25,8 @@ const ItemTile = ({ item }: ItemTileProps) => {
     })
   }
 
-  const handleClickTile = () => {}
+  const handleClickTile = () =>
+    navigate(`${Route.ITEMS}/${btoa(item.id.toString())}`)
 
   return (
     <>

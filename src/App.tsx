@@ -28,7 +28,7 @@ import { Route as AppRoute, RelativeRoute } from './utils/constants/enums'
 const ClerkAndRoutes = () => {
   const location: Location<AppLocation> = useLocation()
   const previousLocation = location.state?.previousLocation
-  const { DASHBOARD, ITEM, PROFILE } = AppRoute
+  const { DASHBOARD, ITEMS, PROFILE } = AppRoute
 
   return (
     <ClerkProvider
@@ -37,7 +37,7 @@ const ClerkAndRoutes = () => {
     >
       <Routes location={previousLocation || location}>
         <Route path={DASHBOARD} element={<Main />} />
-        <Route path={ITEM} element={<Item />}></Route>
+        <Route path={`${ITEMS}/:id`} element={<Item />}></Route>
         <Route path={PROFILE} element={<Profile />} />
         <Route path='*' element={<Fallback />} />
       </Routes>

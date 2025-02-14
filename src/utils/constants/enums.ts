@@ -1,6 +1,6 @@
 export const Route = {
   DASHBOARD: '/',
-  ITEM: '/item',
+  ITEMS: '/items',
   PROFILE: '/profile',
 } as const
 
