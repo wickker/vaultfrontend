@@ -5,9 +5,15 @@ import { mc } from '@/utils/functions/commons'
 type PageProps = {
   header?: JSX.Element
   className?: string
+  hideFooter?: boolean
 } & PropsWithChildren
 
-const Page = ({ children, header = <div />, className }: PageProps) => {
+const Page = ({
+  children,
+  header = <div />,
+  className,
+  hideFooter = false,
+}: PageProps) => {
   return (
     <div className='flex h-[100dvh] w-full justify-center'>
       <div
@@ -18,7 +24,7 @@ const Page = ({ children, header = <div />, className }: PageProps) => {
       >
         {header}
         {children}
-        <Footer />
+        {hideFooter ? <div /> : <Footer />}
       </div>
     </div>
   )

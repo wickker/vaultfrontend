@@ -15,6 +15,7 @@ import {
 import { registerSW } from 'virtual:pwa-register'
 import { AppLocation } from './@types/commons'
 import { Toast } from './components/commons'
+import Fallback from './components/Fallback'
 import Item from './components/Item'
 import Main from './components/Main'
 import ItemModal from './components/Main/Dashboard/ItemModal'
@@ -38,7 +39,7 @@ const ClerkAndRoutes = () => {
         <Route path={DASHBOARD} element={<Main />} />
         <Route path={ITEM} element={<Item />}></Route>
         <Route path={PROFILE} element={<Profile />} />
-        {/* TODO: Add catch all */}
+        <Route path='*' element={<Fallback />} />
       </Routes>
 
       {previousLocation && (
