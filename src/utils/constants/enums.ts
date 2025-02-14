@@ -5,3 +5,7 @@ export const Route = {
 } as const
 
 export type Route = (typeof Route)[keyof typeof Route]
+
+export const RelativeRoute = {
+  MODAL: 'modal',
+}

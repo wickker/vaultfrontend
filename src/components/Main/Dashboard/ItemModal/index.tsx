@@ -4,6 +4,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { BsTrash } from 'react-icons/bs'
 import { RxCross2 } from 'react-icons/rx'
+import { Location, useLocation, useNavigate } from 'react-router'
+import { AppLocation } from '@/@types/commons'
 import { Item, ItemFormSchema } from '@/@types/items'
 import {
   FormItem,
@@ -15,13 +17,13 @@ import ModalFooter from '@/components/commons/ModalFooter'
 import useItem from '@/hooks/queries/useItem'
 import { QUERY_KEYS } from '@/utils/constants/queryKeys'
 
-type ItemModalProps = {
-  isVisible: boolean
-  onClose: () => void
+export type ItemModalProps = {
   item?: Item
 }
 
-const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
+const ItemModal = () => {
+  const location: Location<AppLocation<ItemModalProps>> = useLocation()
+  const item = location.state.props.item
   const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] =
     useState(false)
   const defaultValues = {
@@ -39,6 +41,7 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
   const queryClient = useQueryClient()
   const firstInputRef = useRef<HTMLInputElement | null>(null)
   const { ref, ...rest } = register('name')
+  const navigate = useNavigate()
   const {
     useCreateItemMutation,
     useUpdateItemMutation,
@@ -82,17 +85,17 @@ const ItemModal = ({ isVisible, onClose, item }: ItemModalProps) => {
 
   const handleCancel = () => {
     reset(defaultValues)
-    onClose()
+    navigate(-1)
   }
 
   useEffect(() => {
-    if (isVisible && firstInputRef.current) firstInputRef.current.focus()
-  }, [isVisible])
+    if (firstInputRef.current) firstInputRef.current.focus()
+  }, [])
 
   return (
     <>
       <Modal
-        isVisible={isVisible}
+        isVisible
         footer={
           <ModalFooter
             onCancel={handleCancel}

@@ -1,16 +1,28 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { RiLoader4Line } from 'react-icons/ri'
-import ItemModal from './ItemModal'
+import { useLocation, useNavigate } from 'react-router'
+import { ItemModalProps } from './ItemModal'
 import ItemTile from './ItemTile'
+import { AppLocation } from '@/@types/commons'
 import { Button, NoItemsYet, Page, SearchHeader } from '@/components/commons'
 import useItem from '@/hooks/queries/useItem'
+import { RelativeRoute } from '@/utils/constants/enums'
 
 const Dashboard = () => {
-  const [isAddItemModalVisible, setIsAddItemModalVisible] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
   const { useGetItemsQuery } = useItem()
   const getItems = useGetItemsQuery()
   const hasItems = getItems.isSuccess && getItems.data.length > 0
+
+  const handleAddItem = () =>
+    navigate(RelativeRoute.MODAL, {
+      state: {
+        props: {},
+        previousLocation: location,
+      } satisfies AppLocation<ItemModalProps>,
+    })
 
   const items = useMemo(
     () =>
@@ -53,15 +65,10 @@ const Dashboard = () => {
         <Button
           icon={<FaPlus className='h-5 w-5' />}
           className='rounded-full p-2'
-          onClick={() => setIsAddItemModalVisible(true)}
+          onClick={handleAddItem}
           disabled={getItems.isFetching}
         />
       </div>
-
-      <ItemModal
-        isVisible={isAddItemModalVisible}
-        onClose={() => setIsAddItemModalVisible(false)}
-      />
     </Page>
   )
 }

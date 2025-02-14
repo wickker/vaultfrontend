@@ -1,13 +1,11 @@
-import { useSearchParams } from 'react-router'
-import useRecord from '@/hooks/queries/useRecord'
+import { Page } from '@/components/commons'
 
 const Item = () => {
-  const [search] = useSearchParams()
-  const { useGetRecordsByItem } = useRecord()
-  const getRecords = useGetRecordsByItem(search.get('id') || '')
-  console.log(getRecords.data)
-
-  return <div>ITEM</div>
+  return (
+    <Page>
+      <div>Item Page</div>
+    </Page>
+  )
 }
 
 export default Item

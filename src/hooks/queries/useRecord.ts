@@ -9,26 +9,21 @@ const path = '/records'
 const useRecord = () => {
   const { getToken } = useAuth()
 
-  const useGetRecordsByItem = (itemId: string) => {
-    const decodedItemId = atob(itemId)
-
-    return useQuery({
-      queryKey: QUERY_KEYS.GET_RECORDS(decodedItemId),
+  const useGetRecordsByItem = (itemId: number) =>
+    useQuery({
+      queryKey: QUERY_KEYS.GET_RECORDS(itemId),
       queryFn: async (): Promise<GetRecordsByItemResponse> => {
         const res = await vaultApi.get(path, {
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           },
-          params: {
-            itemId: decodedItemId,
-          },
+          params: { itemId },
         })
         return res.data
       },
-      enabled: !!decodedItemId,
+      enabled: !!itemId,
       retry: false,
     })
-  }
 
   return { useGetRecordsByItem }
 }

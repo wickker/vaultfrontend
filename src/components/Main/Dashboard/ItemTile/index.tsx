@@ -1,35 +1,31 @@
-import { MouseEvent, useState } from 'react'
+import { MouseEvent } from 'react'
 import { DateTime } from 'luxon'
 import { FiEdit } from 'react-icons/fi'
-import { createSearchParams, useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
+import { AppLocation } from '@/@types/commons'
 import { Item } from '@/@types/items'
-import ItemModal from '@/components/Main/Dashboard/ItemModal'
-import { Route } from '@/utils/constants/enums'
+import { ItemModalProps } from '@/components/Main/Dashboard/ItemModal'
+import { RelativeRoute } from '@/utils/constants/enums'
 
 type ItemTileProps = {
   item: Item
 }
 
 const ItemTile = ({ item }: ItemTileProps) => {
-  const [isUpdateItemModalVisible, setIsUpdateItemModalVisible] =
-    useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
 
   const handleEdit = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    setIsUpdateItemModalVisible(true)
-  }
-
-  const handleClickTile = () => {
-    const params = {
-      id: btoa(item.id.toString()),
-      name: item.name,
-    }
-    navigate({
-      pathname: Route.ITEM,
-      search: createSearchParams(params).toString(),
+    navigate(RelativeRoute.MODAL, {
+      state: {
+        props: { item },
+        previousLocation: location,
+      } satisfies AppLocation<ItemModalProps>,
     })
   }
+
+  const handleClickTile = () => {}
 
   return (
     <>
@@ -57,12 +53,6 @@ const ItemTile = ({ item }: ItemTileProps) => {
           <FiEdit className='h-6 w-6 text-slate-500' />
         </button>
       </div>
-
-      <ItemModal
-        isVisible={isUpdateItemModalVisible}
-        onClose={() => setIsUpdateItemModalVisible(false)}
-        item={item}
-      />
     </>
   )
 }
