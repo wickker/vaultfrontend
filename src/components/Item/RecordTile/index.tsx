@@ -5,9 +5,14 @@ import { Record } from '@/@types/records'
 type RecordTileProps = {
   record: Record
   showValue?: boolean
+  onToggleValueDisplay: (id: number) => void
 }
 
-const RecordTile = ({ record, showValue = true }: RecordTileProps) => {
+const RecordTile = ({
+  record,
+  showValue = true,
+  onToggleValueDisplay,
+}: RecordTileProps) => {
   const renderValue = () => {
     if (showValue) return record.value
 
@@ -23,7 +28,9 @@ const RecordTile = ({ record, showValue = true }: RecordTileProps) => {
         <p className='font-semibold'>{record.name}</p>
 
         <div className='flex items-center gap-x-3'>
-          <IoEyeOutline className='h-6 w-6' />
+          <button onClick={() => onToggleValueDisplay(record.id)}>
+            <IoEyeOutline className='h-6 w-6' />
+          </button>
           <BsCopy className='h-5 w-5' />
         </div>
       </div>

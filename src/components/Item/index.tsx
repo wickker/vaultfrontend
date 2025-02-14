@@ -8,7 +8,7 @@ import useRecord from '@/hooks/queries/useRecord'
 import { RecordType, Route } from '@/utils/constants/enums'
 
 const Item = () => {
-  const [recordIdsToHide, setRecordIdsToHide] = useState<Array<number>>([])
+  const [recordIdsToHide, setRecordIdsToHide] = useState(new Set<number>([]))
   const navigate = useNavigate()
   const { id } = useParams()
   const itemId = parseInt(atob(id || ''))
@@ -17,6 +17,22 @@ const Item = () => {
   const hasRecords = getRecords.isSuccess && getRecords.data.records.length > 0
 
   const handleGoBack = () => navigate(Route.DASHBOARD)
+
+  const toggleValueDisplay = (id: number) => {
+    if (recordIdsToHide.has(id)) {
+      setRecordIdsToHide((prev) => {
+        const copy = new Set(prev)
+        copy.delete(id)
+        return copy
+      })
+      return
+    }
+    setRecordIdsToHide((prev) => {
+      const copy = new Set(prev)
+      copy.add(id)
+      return copy
+    })
+  }
 
   const renderRecords = () => {
     if (getRecords.isFetching)
@@ -30,15 +46,14 @@ const Item = () => {
 
     return (
       <div className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pt-6 pb-22'>
-        {getRecords.data.records.map((record) => {
-          return (
-            <RecordTile
-              record={record}
-              showValue={!recordIdsToHide.includes(record.id)}
-              key={record.id}
-            />
-          )
-        })}
+        {getRecords.data.records.map((record) => (
+          <RecordTile
+            record={record}
+            showValue={!recordIdsToHide.has(record.id)}
+            onToggleValueDisplay={toggleValueDisplay}
+            key={record.id}
+          />
+        ))}
       </div>
     )
   }
@@ -50,7 +65,7 @@ const Item = () => {
           (r) => r.name === RecordType.PASSWORD || r.name === RecordType.PIN
         )
         .map((r) => r.id)
-      setRecordIdsToHide(idsToHide)
+      setRecordIdsToHide(new Set(idsToHide))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getRecords.data?.records])
