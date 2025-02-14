@@ -6,12 +6,14 @@ type RecordTileProps = {
   record: Record
   showValue?: boolean
   onToggleValueDisplay: (id: number) => void
+  onCopy: (text: string) => void
 }
 
 const RecordTile = ({
   record,
   showValue = true,
   onToggleValueDisplay,
+  onCopy,
 }: RecordTileProps) => {
   const renderValue = () => {
     if (showValue) return record.value
@@ -31,7 +33,9 @@ const RecordTile = ({
           <button onClick={() => onToggleValueDisplay(record.id)}>
             <IoEyeOutline className='h-6 w-6' />
           </button>
-          <BsCopy className='h-5 w-5' />
+          <button onClick={() => onCopy(record.value)}>
+            <BsCopy className='h-5 w-5' />
+          </button>
         </div>
       </div>
 
