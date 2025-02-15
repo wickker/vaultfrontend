@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react'
+import { FaPlus } from 'react-icons/fa6'
 import { IoChevronBack } from 'react-icons/io5'
 import { RiLoader4Line } from 'react-icons/ri'
-import { useNavigate, useParams } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
+import { RecordModalProps } from './RecordModal'
 import RecordTile from './RecordTile'
+import { AppLocation } from '@/@types/commons'
 import { Button, NoItemsYet, Page } from '@/components/commons'
 import { useToastContext } from '@/contexts/useToastContext/context'
 import useRecord from '@/hooks/queries/useRecord'
-import { RecordType, Route } from '@/utils/constants/enums'
+import { RecordType, RelativeRoute, Route } from '@/utils/constants/enums'
 
 const Item = () => {
   const [recordIdsToHide, setRecordIdsToHide] = useState(new Set<number>([]))
   const { toast } = useToastContext()
+  const location = useLocation()
   const navigate = useNavigate()
   const { id } = useParams()
   const itemId = parseInt(atob(id || ''))
@@ -52,6 +56,16 @@ const Item = () => {
       return copy
     })
   }
+
+  const handleAddRecord = () =>
+    navigate(RelativeRoute.MODAL, {
+      state: {
+        props: {
+          itemId,
+        },
+        previousLocation: location,
+      } satisfies AppLocation<RecordModalProps>,
+    })
 
   const renderRecords = () => {
     if (getRecords.isFetching)
@@ -106,8 +120,18 @@ const Item = () => {
           </h1>
         </div>
       }
+      className='relative'
     >
       {renderRecords()}
+
+      <div className='absolute right-0 bottom-0 p-6'>
+        <Button
+          icon={<FaPlus className='h-5 w-5' />}
+          className='rounded-full p-2'
+          onClick={handleAddRecord}
+          disabled={getRecords.isFetching}
+        />
+      </div>
     </Page>
   )
 }

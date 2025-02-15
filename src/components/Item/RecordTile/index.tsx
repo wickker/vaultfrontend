@@ -4,7 +4,7 @@ import { Record } from '@/@types/records'
 
 type RecordTileProps = {
   record: Record
-  showValue?: boolean
+  showValue: boolean
   onToggleValueDisplay: (id: number) => void
   onCopy: (text: string) => void
 }
@@ -31,10 +31,10 @@ const RecordTile = ({
 
         <div className='flex items-center gap-x-3'>
           <button onClick={() => onToggleValueDisplay(record.id)}>
-            <IoEyeOutline className='h-6 w-6' />
+            <IoEyeOutline className='h-7 w-7' />
           </button>
           <button onClick={() => onCopy(record.value)}>
-            <BsCopy className='h-5 w-5' />
+            <BsCopy className='h-5.5 w-5.5' />
           </button>
         </div>
       </div>

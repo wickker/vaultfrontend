@@ -17,6 +17,7 @@ import { AppLocation } from './@types/commons'
 import { Toast } from './components/commons'
 import Fallback from './components/Fallback'
 import Item from './components/Item'
+import RecordModal from './components/Item/RecordModal'
 import Main from './components/Main'
 import ItemModal from './components/Main/Dashboard/ItemModal'
 import Profile from './components/Profile'
@@ -47,6 +48,10 @@ const ClerkAndRoutes = () => {
           <Route
             path={`${DASHBOARD}${RelativeRoute.MODAL}`}
             element={<ItemModal />}
+          />
+          <Route
+            path={`${ITEMS}/:id/${RelativeRoute.MODAL}`}
+            element={<RecordModal />}
           />
         </Routes>
       )}
