@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { RxCross2 } from 'react-icons/rx'
 import { useNavigate } from 'react-router'
 import { Record } from '@/@types/records'
-import { Modal } from '@/components/commons'
+import { Modal, Select } from '@/components/commons'
 import ModalFooter from '@/components/commons/ModalFooter'
+import { RecordType } from '@/utils/constants/enums'
 
 export type RecordModalProps = {
   itemId: number
@@ -11,6 +13,7 @@ export type RecordModalProps = {
 
 const RecordModal = () => {
   const navigate = useNavigate()
+  const [value, setValue] = useState<RecordType>(RecordType.PASSWORD)
 
   const handleCancel = () => {
     // reset(defaultValues)
@@ -39,6 +42,14 @@ const RecordModal = () => {
     >
       <div className='flex flex-col p-6'>
         <form>
+          <Select<RecordType>
+            options={Object.values(RecordType).map((r) => ({
+              text: r,
+              value: r,
+            }))}
+            value={value}
+            onChange={setValue}
+          />
           {/* <FormItem label='Name' error={errors.name?.message}>
               <Input
                 className='bg-app-background'
