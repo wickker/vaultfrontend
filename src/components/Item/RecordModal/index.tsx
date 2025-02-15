@@ -1,9 +1,11 @@
+import { useEffect, useRef } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, Controller } from 'react-hook-form'
 import { RxCross2 } from 'react-icons/rx'
-import { useNavigate } from 'react-router'
+import { Location, useLocation, useNavigate } from 'react-router'
+import { AppLocation } from '@/@types/commons'
 import { Record, RecordFormSchema } from '@/@types/records'
-import { FormItem, Modal, Select } from '@/components/commons'
+import { FormItem, Input, Modal, Select } from '@/components/commons'
 import ModalFooter from '@/components/commons/ModalFooter'
 import { RecordType } from '@/utils/constants/enums'
 
@@ -13,6 +15,9 @@ export type RecordModalProps = {
 }
 
 const RecordModal = () => {
+  const location: Location<AppLocation<RecordModalProps>> = useLocation()
+  const itemId = location.state.props.itemId
+  console.log(itemId)
   const navigate = useNavigate()
   const defaultValues = {
     name: RecordType.PASSWORD,
@@ -20,7 +25,7 @@ const RecordModal = () => {
   }
   const {
     control,
-    // register,
+    register,
     handleSubmit,
     formState: { errors },
     reset,
@@ -28,6 +33,8 @@ const RecordModal = () => {
     resolver: zodResolver(RecordFormSchema),
     values: defaultValues,
   })
+  const firstInputRef = useRef<HTMLInputElement | null>(null)
+  const { ref, ...rest } = register('value')
 
   const handleSave = handleSubmit((d) => {
     console.log(d)
@@ -37,6 +44,10 @@ const RecordModal = () => {
     reset(defaultValues)
     navigate(-1)
   }
+
+  useEffect(() => {
+    if (firstInputRef.current) firstInputRef.current.focus()
+  }, [])
 
   return (
     <Modal
@@ -76,16 +87,17 @@ const RecordModal = () => {
               )}
             />
           </FormItem>
-          {/* <FormItem label='Name' error={errors.name?.message}>
-              <Input
-                className='bg-app-background'
-                {...rest}
-                ref={(e) => {
-                  ref(e)
-                  firstInputRef.current = e
-                }}
-              />
-            </FormItem> */}
+
+          <FormItem label='Value' error={errors.value?.message}>
+            <Input
+              className='bg-app-background'
+              {...rest}
+              ref={(e) => {
+                ref(e)
+                firstInputRef.current = e
+              }}
+            />
+          </FormItem>
         </form>
       </div>
     </Modal>
