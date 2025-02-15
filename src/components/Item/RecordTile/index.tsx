@@ -30,10 +30,16 @@ const RecordTile = ({
         <p className='font-semibold'>{record.name}</p>
 
         <div className='flex items-center gap-x-3'>
-          <button onClick={() => onToggleValueDisplay(record.id)}>
+          <button
+            onClick={() => onToggleValueDisplay(record.id)}
+            className='hover:cursor-pointer'
+          >
             <IoEyeOutline className='h-7 w-7' />
           </button>
-          <button onClick={() => onCopy(record.value)}>
+          <button
+            onClick={() => onCopy(record.value)}
+            className='hover:cursor-pointer'
+          >
             <BsCopy className='h-5.5 w-5.5' />
           </button>
         </div>

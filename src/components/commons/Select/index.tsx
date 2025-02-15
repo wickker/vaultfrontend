@@ -37,7 +37,7 @@ const Select = <T,>({ options = [], value, onChange }: SelectProps<T>) => {
           return (
             <Fragment key={`${o.value}`}>
               <button
-                className='grid grid-cols-[1fr_auto] items-center gap-x-2 py-3'
+                className='grid w-full grid-cols-[1fr_auto] items-center gap-x-2 py-3'
                 onClick={() => handleSelect(o.value)}
               >
                 <p
@@ -57,7 +57,7 @@ const Select = <T,>({ options = [], value, onChange }: SelectProps<T>) => {
       </Menu>
 
       <button
-        className='text-app-default focus-visible-app bg-app-background grid w-full grid-cols-[1fr_auto] items-center gap-x-2 rounded-md p-2.5 text-left text-base'
+        className='text-app-default focus-visible-app bg-app-background grid w-full grid-cols-[1fr_auto] items-center gap-x-2 rounded-md p-2.5 text-left text-base hover:cursor-pointer'
         onClick={handleOpenSelect}
       >
         <p className='truncate'>{`${value}`}</p>
