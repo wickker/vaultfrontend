@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm, Controller } from 'react-hook-form'
 import { RxCross2 } from 'react-icons/rx'
 import { useNavigate } from 'react-router'
-import { Record } from '@/@types/records'
-import { Modal, Select } from '@/components/commons'
+import { Record, RecordFormSchema } from '@/@types/records'
+import { FormItem, Modal, Select } from '@/components/commons'
 import ModalFooter from '@/components/commons/ModalFooter'
 import { RecordType } from '@/utils/constants/enums'
 
@@ -13,10 +14,27 @@ export type RecordModalProps = {
 
 const RecordModal = () => {
   const navigate = useNavigate()
-  const [value, setValue] = useState<RecordType>(RecordType.PASSWORD)
+  const defaultValues = {
+    name: RecordType.PASSWORD,
+    value: '',
+  }
+  const {
+    control,
+    // register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(RecordFormSchema),
+    values: defaultValues,
+  })
+
+  const handleSave = handleSubmit((d) => {
+    console.log(d)
+  })
 
   const handleCancel = () => {
-    // reset(defaultValues)
+    reset(defaultValues)
     navigate(-1)
   }
 
@@ -26,7 +44,7 @@ const RecordModal = () => {
       footer={
         <ModalFooter
           onCancel={handleCancel}
-          onSave={() => {}}
+          onSave={handleSave}
           // isSaveLoading
           // isSaveDisabled
         />
@@ -42,14 +60,22 @@ const RecordModal = () => {
     >
       <div className='flex flex-col p-6'>
         <form>
-          <Select<RecordType>
-            options={Object.values(RecordType).map((r) => ({
-              text: r,
-              value: r,
-            }))}
-            value={value}
-            onChange={setValue}
-          />
+          <FormItem label='Type' error={errors.name?.message}>
+            <Controller
+              control={control}
+              name='name'
+              render={({ field: { onChange, value } }) => (
+                <Select<RecordType>
+                  options={Object.values(RecordType).map((r) => ({
+                    text: r,
+                    value: r,
+                  }))}
+                  value={value}
+                  onChange={onChange}
+                />
+              )}
+            />
+          </FormItem>
           {/* <FormItem label='Name' error={errors.name?.message}>
               <Input
                 className='bg-app-background'

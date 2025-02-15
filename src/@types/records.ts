@@ -2,6 +2,10 @@ import { z } from 'zod'
 import { UpdateItemRequestSchema } from './items'
 
 // Requests
+export const RecordFormSchema = z.object({
+  name: z.string().min(1),
+  value: z.string().min(1),
+})
 
 // Responses
 export const RecordSchema = z.object({
@@ -20,3 +24,4 @@ export type GetRecordsByItemResponse = z.infer<
   typeof GetRecordsByItemResponseSchema
 >
 export type Record = z.infer<typeof RecordSchema>
+export type RecordForm = z.infer<typeof RecordFormSchema>
