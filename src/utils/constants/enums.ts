@@ -14,6 +14,7 @@ export type RelativeRoute = (typeof RelativeRoute)[keyof typeof RelativeRoute]
 
 export const RecordType = {
   ADDRESS: 'Address',
+  BIRTHDAY: 'Birthday',
   EMAIL: 'Email',
   KEY: 'Key',
   PASSWORD: 'Password',

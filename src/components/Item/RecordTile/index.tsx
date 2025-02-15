@@ -1,6 +1,7 @@
 import { BsCopy } from 'react-icons/bs'
 import { IoEyeOutline } from 'react-icons/io5'
 import { Record } from '@/@types/records'
+import { RecordType } from '@/utils/constants/enums'
 
 type RecordTileProps = {
   record: Record
@@ -15,6 +16,9 @@ const RecordTile = ({
   onToggleValueDisplay,
   onCopy,
 }: RecordTileProps) => {
+  const showVisibilityToggle =
+    record.name === RecordType.PASSWORD || record.name === RecordType.PIN
+
   const renderValue = () => {
     if (showValue) return record.value
 
@@ -30,12 +34,14 @@ const RecordTile = ({
         <p className='font-semibold'>{record.name}</p>
 
         <div className='flex items-center gap-x-3'>
-          <button
-            onClick={() => onToggleValueDisplay(record.id)}
-            className='hover:cursor-pointer'
-          >
-            <IoEyeOutline className='h-7 w-7' />
-          </button>
+          {showVisibilityToggle && (
+            <button
+              onClick={() => onToggleValueDisplay(record.id)}
+              className='hover:cursor-pointer'
+            >
+              <IoEyeOutline className='h-7 w-7' />
+            </button>
+          )}
           <button
             onClick={() => onCopy(record.value)}
             className='hover:cursor-pointer'
