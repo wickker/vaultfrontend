@@ -103,6 +103,7 @@ const RecordModal = () => {
             />
           </FormItem>
 
+          {/* TODO: Show only when password type is selected */}
           <GeneratePassword onAutofill={handleAutofill} />
         </form>
       </div>
