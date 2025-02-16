@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { ToastContextMethods } from '@/contexts/useToastContext/context'
 
 export const mc = (...inputs: Array<ClassValue>) => twMerge(clsx(inputs))
 
@@ -24,4 +25,24 @@ export const getRandomPastelColor = () => {
     b: Math.round(baseColor.b + (white.b - baseColor.b) * saturation),
   }
   return `rgb(${Object.values(pastelColor).join(', ')})`
+}
+
+export const copyToClipboard = async (
+  text: string,
+  toast: ToastContextMethods
+) => {
+  const res = await navigator.permissions.query({
+    name: 'clipboard-write' as PermissionName,
+  })
+  if (res.state !== 'granted' && res.state !== 'prompt') {
+    toast.error('Browser copy to clipboard functionality is not supported')
+    return
+  }
+
+  try {
+    await navigator.clipboard.writeText(text)
+    toast.success('Content copied to clipboard!')
+  } catch (err) {
+    toast.error(`Failed to copy to clipboard: ${err}`)
+  }
 }

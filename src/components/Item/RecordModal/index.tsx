@@ -30,6 +30,7 @@ const RecordModal = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm({
     resolver: zodResolver(RecordFormSchema),
     values: defaultValues,
@@ -45,6 +46,8 @@ const RecordModal = () => {
     reset(defaultValues)
     navigate(-1)
   }
+
+  const handleAutofill = (v: string) => setValue('value', v)
 
   useEffect(() => {
     if (firstInputRef.current) firstInputRef.current.focus()
@@ -99,7 +102,8 @@ const RecordModal = () => {
               }}
             />
           </FormItem>
-          <GeneratePassword />
+
+          <GeneratePassword onAutofill={handleAutofill} />
         </form>
       </div>
     </Modal>

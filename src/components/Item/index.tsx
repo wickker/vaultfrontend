@@ -10,6 +10,7 @@ import { Button, NoItemsYet, Page } from '@/components/commons'
 import { useToastContext } from '@/contexts/useToastContext/context'
 import useRecord from '@/hooks/queries/useRecord'
 import { RecordType, RelativeRoute, Route } from '@/utils/constants/enums'
+import { copyToClipboard } from '@/utils/functions/commons'
 
 const Item = () => {
   const [recordIdsToHide, setRecordIdsToHide] = useState(new Set<number>([]))
@@ -23,23 +24,6 @@ const Item = () => {
   const hasRecords = getRecords.isSuccess && getRecords.data.records.length > 0
 
   const handleGoBack = () => navigate(Route.DASHBOARD)
-
-  const copyToClipboard = async (text: string) => {
-    const res = await navigator.permissions.query({
-      name: 'clipboard-write' as PermissionName,
-    })
-    if (res.state !== 'granted' && res.state !== 'prompt') {
-      toast.error('Browser copy to clipboard functionality is not supported')
-      return
-    }
-
-    try {
-      await navigator.clipboard.writeText(text)
-      toast.success('Content copied to clipboard!')
-    } catch (err) {
-      toast.error(`Failed to copy to clipboard: ${err}`)
-    }
-  }
 
   const toggleValueDisplay = (id: number) => {
     if (recordIdsToHide.has(id)) {
@@ -84,7 +68,7 @@ const Item = () => {
             record={record}
             showValue={!recordIdsToHide.has(record.id)}
             onToggleValueDisplay={toggleValueDisplay}
-            onCopy={copyToClipboard}
+            onCopy={() => copyToClipboard(record.value, toast)}
             key={record.id}
           />
         ))}

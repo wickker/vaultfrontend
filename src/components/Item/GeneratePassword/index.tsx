@@ -4,6 +4,7 @@ import { BsCopy } from 'react-icons/bs'
 import { Button, Input, Menu, Switch } from '@/components/commons'
 import { ButtonVariant } from '@/components/commons/Button/types'
 import { useToastContext } from '@/contexts/useToastContext/context'
+import { copyToClipboard } from '@/utils/functions/commons'
 
 type Settings = {
   numbers: boolean
@@ -23,12 +24,16 @@ const permanentSettings = {
   minLengthNumbers: 0,
 }
 
-const GeneratePassword = () => {
+type GeneratePasswordProps = {
+  onAutofill: (v: string) => void
+}
+
+const GeneratePassword = ({ onAutofill }: GeneratePasswordProps) => {
   const { toast } = useToastContext()
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const [settings, setSettings] = useState<Settings>({ ...defaultSettings })
   const [passwordDisplay, setPasswordDisplay] = useState(
-    generatePassword(defaultSettings)
+    generatePassword(defaultSettings) || ''
   )
 
   function generatePassword(config: Settings) {
@@ -51,7 +56,7 @@ const GeneratePassword = () => {
 
   const closeMenu = () => {
     setSettings(defaultSettings)
-    setPasswordDisplay(generatePassword(defaultSettings))
+    setPasswordDisplay(generatePassword(defaultSettings) || '')
     setIsMenuVisible(false)
   }
 
@@ -76,6 +81,11 @@ const GeneratePassword = () => {
     }
   }
 
+  const handleAutofill = (v: string) => {
+    onAutofill(v)
+    closeMenu()
+  }
+
   return (
     <>
       <Menu
@@ -89,7 +99,9 @@ const GeneratePassword = () => {
             >
               Re-generate
             </Button>
-            <Button>Autofill</Button>
+            <Button onClick={() => handleAutofill(passwordDisplay)}>
+              Autofill
+            </Button>
           </div>
         }
       >
@@ -99,7 +111,12 @@ const GeneratePassword = () => {
             value={passwordDisplay}
             onChange={(e) => setPasswordDisplay(e.target.value)}
           />
-          <BsCopy className='h-6 w-6 text-slate-500' />
+          <button
+            className='hover:cursor-pointer'
+            onClick={() => copyToClipboard(passwordDisplay, toast)}
+          >
+            <BsCopy className='h-6 w-6 text-slate-500' />
+          </button>
         </div>
 
         <div className='my-6 h-[1px] w-full bg-slate-200' />
