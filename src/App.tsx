@@ -5,24 +5,66 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import { BrowserRouter, Routes, Route } from 'react-router'
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Location,
+} from 'react-router'
 import { registerSW } from 'virtual:pwa-register'
+import { AppLocation } from './@types/commons'
+import { Toast } from './components/commons'
+import Fallback from './components/Fallback'
 import Item from './components/Item'
+import RecordModal from './components/Item/RecordModal'
 import Main from './components/Main'
+import ItemModal from './components/Main/Dashboard/ItemModal'
 import Profile from './components/Profile'
 import Config from './configs'
-import { Route as R } from './utils/constants/enums'
+import ToastProvider from './contexts/useToastContext'
+import { useToastContext } from './contexts/useToastContext/context'
+import { Route as AppRoute, RelativeRoute } from './utils/constants/enums'
 
-if (!Config.VITE_CLERK_PUBLISHABLE_KEY) {
-  throw new Error('Missing Clerk publishable key')
+const ClerkAndRoutes = () => {
+  const location: Location<AppLocation> = useLocation()
+  const previousLocation = location.state?.previousLocation
+  const { DASHBOARD, ITEMS, PROFILE } = AppRoute
+
+  return (
+    <ClerkProvider
+      publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}
+      afterSignOutUrl={DASHBOARD}
+    >
+      <Routes location={previousLocation || location}>
+        <Route path={DASHBOARD} element={<Main />} />
+        <Route path={`${ITEMS}/:id`} element={<Item />}></Route>
+        <Route path={PROFILE} element={<Profile />} />
+        <Route path='*' element={<Fallback />} />
+      </Routes>
+
+      {previousLocation && (
+        <Routes>
+          <Route
+            path={`${DASHBOARD}${RelativeRoute.MODAL}`}
+            element={<ItemModal />}
+          />
+          <Route
+            path={`${ITEMS}/:id/${RelativeRoute.MODAL}`}
+            element={<RecordModal />}
+          />
+        </Routes>
+      )}
+    </ClerkProvider>
+  )
 }
 
 const App = () => {
   registerSW({ immediate: true })
+  const { toast } = useToastContext()
 
-  // TODO: Change this
   const handleError = (err: Error) =>
-    console.log(err.message || JSON.stringify(err))
+    toast.error(err.message || JSON.stringify(err))
 
   const client = new QueryClient({
     defaultOptions: {
@@ -40,20 +82,14 @@ const App = () => {
 
   return (
     <div className='font-noto-sans'>
-      <QueryClientProvider client={client}>
-        <BrowserRouter>
-          <ClerkProvider
-            publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}
-            afterSignOutUrl='/'
-          >
-            <Routes>
-              <Route path={R.DASHBOARD} element={<Main />} />
-              <Route path={R.ITEM} element={<Item />} />
-              <Route path={R.PROFILE} element={<Profile />} />
-            </Routes>
-          </ClerkProvider>
-        </BrowserRouter>
-      </QueryClientProvider>
+      <ToastProvider>
+        <QueryClientProvider client={client}>
+          <BrowserRouter>
+            <ClerkAndRoutes />
+          </BrowserRouter>
+        </QueryClientProvider>
+        <Toast />
+      </ToastProvider>
     </div>
   )
 }
