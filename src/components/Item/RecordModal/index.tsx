@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm, Controller } from 'react-hook-form'
@@ -11,7 +11,13 @@ import {
   Record,
   RecordFormSchema,
 } from '@/@types/records'
-import { FormItem, Input, Modal, Select } from '@/components/commons'
+import {
+  FormItem,
+  Input,
+  Modal,
+  ModalConfirmDelete,
+  Select,
+} from '@/components/commons'
 import ModalFooter from '@/components/commons/ModalFooter'
 import GeneratePassword from '@/components/Item/GeneratePassword'
 import useRecord from '@/hooks/queries/useRecord'
@@ -24,6 +30,9 @@ export type RecordModalProps = {
 }
 
 const RecordModal = () => {
+  const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] =
+    useState(false)
+
   // props
   const location: Location<AppLocation<RecordModalProps>> = useLocation()
   const itemId = location.state.props.itemId
@@ -56,9 +65,29 @@ const RecordModal = () => {
 
   // query
   const queryClient = useQueryClient()
-  const { useCreateRecordMutation, useUpdateRecordMutation } = useRecord()
+  const {
+    useCreateRecordMutation,
+    useUpdateRecordMutation,
+    useDeleteRecordMutation,
+  } = useRecord()
   const createRecord = useCreateRecordMutation(createRecordSuccessCb)
   const updateRecord = useUpdateRecordMutation(updateRecordSuccessCb)
+  const deleteRecord = useDeleteRecordMutation(deleteRecordSuccessCB)
+
+  function deleteRecordSuccessCB() {
+    queryClient.setQueryData(
+      QUERY_KEYS.GET_RECORDS(itemId),
+      (data: GetRecordsByItemResponse) => {
+        const updatedRecords = data.records.filter((r) => r.id !== record?.id)
+        return {
+          ...data,
+          records: updatedRecords,
+        }
+      }
+    )
+    setIsDeleteConfirmationVisible(false)
+    handleCancel()
+  }
 
   function createRecordSuccessCb() {
     queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_RECORDS(itemId) })
@@ -107,66 +136,81 @@ const RecordModal = () => {
   }, [])
 
   return (
-    <Modal
-      isVisible
-      footer={
-        <ModalFooter
-          onCancel={handleCancel}
-          onSave={handleSave}
-          isSaveLoading={createRecord.isPending || updateRecord.isPending}
-        />
-      }
-      header={
-        <div className='text-app-default flex items-center justify-between p-6'>
-          <h1 className='text-3xl font-semibold'>{title}</h1>
-          {record ? (
-            <button className='hover:cursor-pointer' onClick={() => {}}>
-              <BsTrash className='text-app-danger h-7 w-7' />
-            </button>
-          ) : (
-            <button className='hover:cursor-pointer' onClick={handleCancel}>
-              <RxCross2 className='h-9 w-9' />
-            </button>
-          )}
+    <>
+      <Modal
+        isVisible
+        footer={
+          <ModalFooter
+            onCancel={handleCancel}
+            onSave={handleSave}
+            isSaveLoading={createRecord.isPending || updateRecord.isPending}
+          />
+        }
+        header={
+          <div className='text-app-default flex items-center justify-between p-6'>
+            <h1 className='text-3xl font-semibold'>{title}</h1>
+            {record ? (
+              <button
+                className='hover:cursor-pointer'
+                onClick={() => setIsDeleteConfirmationVisible(true)}
+              >
+                <BsTrash className='text-app-danger h-7 w-7' />
+              </button>
+            ) : (
+              <button className='hover:cursor-pointer' onClick={handleCancel}>
+                <RxCross2 className='h-9 w-9' />
+              </button>
+            )}
+          </div>
+        }
+      >
+        <div className='flex flex-col p-6'>
+          <form>
+            <FormItem label='Type' error={errors.name?.message}>
+              <Controller
+                control={control}
+                name='name'
+                render={({ field: { onChange, value } }) => (
+                  <Select<RecordType>
+                    options={Object.values(RecordType).map((r) => ({
+                      text: r,
+                      value: r,
+                    }))}
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}
+              />
+            </FormItem>
+
+            <FormItem label='Value' error={errors.value?.message}>
+              <Input
+                className='bg-app-background'
+                {...rest}
+                ref={(e) => {
+                  ref(e)
+                  firstInputRef.current = e
+                }}
+              />
+            </FormItem>
+
+            {name === RecordType.PASSWORD && (
+              <GeneratePassword onAutofill={handleAutofill} />
+            )}
+          </form>
         </div>
-      }
-    >
-      <div className='flex flex-col p-6'>
-        <form>
-          <FormItem label='Type' error={errors.name?.message}>
-            <Controller
-              control={control}
-              name='name'
-              render={({ field: { onChange, value } }) => (
-                <Select<RecordType>
-                  options={Object.values(RecordType).map((r) => ({
-                    text: r,
-                    value: r,
-                  }))}
-                  value={value}
-                  onChange={onChange}
-                />
-              )}
-            />
-          </FormItem>
+      </Modal>
 
-          <FormItem label='Value' error={errors.value?.message}>
-            <Input
-              className='bg-app-background'
-              {...rest}
-              ref={(e) => {
-                ref(e)
-                firstInputRef.current = e
-              }}
-            />
-          </FormItem>
-
-          {name === RecordType.PASSWORD && (
-            <GeneratePassword onAutofill={handleAutofill} />
-          )}
-        </form>
-      </div>
-    </Modal>
+      {record && (
+        <ModalConfirmDelete
+          isVisible={isDeleteConfirmationVisible}
+          onConfirm={() => deleteRecord.mutate(record.id)}
+          onClose={() => setIsDeleteConfirmationVisible(false)}
+          text='Do you really want to delete this record? This process cannot be undone.'
+          isLoading={deleteRecord.isPending}
+        />
+      )}
+    </>
   )
 }
 
