@@ -6,7 +6,11 @@ import { BsTrash } from 'react-icons/bs'
 import { RxCross2 } from 'react-icons/rx'
 import { Location, useLocation, useNavigate } from 'react-router'
 import { AppLocation } from '@/@types/commons'
-import { Record, RecordFormSchema } from '@/@types/records'
+import {
+  GetRecordsByItemResponse,
+  Record,
+  RecordFormSchema,
+} from '@/@types/records'
 import { FormItem, Input, Modal, Select } from '@/components/commons'
 import ModalFooter from '@/components/commons/ModalFooter'
 import GeneratePassword from '@/components/Item/GeneratePassword'
@@ -52,16 +56,43 @@ const RecordModal = () => {
 
   // query
   const queryClient = useQueryClient()
-  const { useCreateRecordMutation } = useRecord()
+  const { useCreateRecordMutation, useUpdateRecordMutation } = useRecord()
   const createRecord = useCreateRecordMutation(createRecordSuccessCb)
+  const updateRecord = useUpdateRecordMutation(updateRecordSuccessCb)
 
   function createRecordSuccessCb() {
     queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_RECORDS(itemId) })
     handleCancel()
   }
 
+  function updateRecordSuccessCb(res: Record) {
+    queryClient.setQueryData(
+      QUERY_KEYS.GET_RECORDS(itemId),
+      (data: GetRecordsByItemResponse) => {
+        const updatedRecords = data.records.map((r) =>
+          r.id === res.id
+            ? {
+                id: r.id,
+                name: res.name,
+                value: res.value,
+              }
+            : r
+        )
+        return {
+          ...data,
+          records: updatedRecords,
+        }
+      }
+    )
+    handleCancel()
+  }
+
   const handleSave = handleSubmit((d) => {
-    createRecord.mutate({ name: d.name, value: d.value, item_id: itemId })
+    if (!record) {
+      createRecord.mutate({ name: d.name, value: d.value, item_id: itemId })
+      return
+    }
+    updateRecord.mutate({ id: record.id, name: d.name, value: d.value })
   })
 
   const handleCancel = () => {
@@ -82,7 +113,7 @@ const RecordModal = () => {
         <ModalFooter
           onCancel={handleCancel}
           onSave={handleSave}
-          isSaveLoading={createRecord.isPending}
+          isSaveLoading={createRecord.isPending || updateRecord.isPending}
         />
       }
       header={
