@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 // Requests
 export const ItemFormSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().trim().min(1),
 })
 
 export const UpdateItemRequestSchema = z.object({

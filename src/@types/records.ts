@@ -3,8 +3,8 @@ import { UpdateItemRequestSchema } from './items'
 
 // Requests
 export const RecordFormSchema = z.object({
-  name: z.string().min(1),
-  value: z.string().min(1),
+  name: z.string().trim().min(1),
+  value: z.string().trim().min(1),
 })
 
 export const CreateRecordRequestSchema = RecordFormSchema.merge(
