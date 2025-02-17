@@ -1,5 +1,5 @@
 import { ChangeEvent, MouseEvent, useState } from 'react'
-import { GeneratePassword as generatePasswordLite } from 'generate-password-lite'
+import { GeneratePassword as GeneratePasswordLite } from 'generate-password-lite'
 import { BsCopy } from 'react-icons/bs'
 import { Button, Input, Menu, Switch } from '@/components/commons'
 import { ButtonVariant } from '@/components/commons/Button/types'
@@ -40,9 +40,9 @@ const GeneratePassword = ({ onAutofill }: GeneratePasswordProps) => {
     try {
       const length = parseInt(config.length)
       if (!length) {
-        throw new Error('Invalid password length input.')
+        throw new Error('Invalid password characters input.')
       }
-      const password = generatePasswordLite({
+      const password = GeneratePasswordLite({
         numbers: config.numbers,
         symbols: config.symbols,
         length: length,

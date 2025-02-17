@@ -7,6 +7,7 @@ import { RecordModalProps } from './RecordModal'
 import RecordTile from './RecordTile'
 import { AppLocation } from '@/@types/commons'
 import { Button, NoItemsYet, Page } from '@/components/commons'
+import { ButtonVariant } from '@/components/commons/Button/types'
 import { useToastContext } from '@/contexts/useToastContext/context'
 import useRecord from '@/hooks/queries/useRecord'
 import { RecordType, RelativeRoute, Route } from '@/utils/constants/enums'
@@ -69,6 +70,7 @@ const Item = () => {
             showValue={!recordIdsToHide.has(record.id)}
             onToggleValueDisplay={toggleValueDisplay}
             onCopy={() => copyToClipboard(record.value, toast)}
+            itemId={itemId}
             key={record.id}
           />
         ))}
@@ -96,7 +98,7 @@ const Item = () => {
           <Button
             icon={<IoChevronBack className='h-5 w-5' />}
             className='rounded-full p-2'
-            variant='secondary'
+            variant={ButtonVariant.SECONDARY}
             onClick={handleGoBack}
           />
           <h1 className='text-3xl font-semibold'>

@@ -7,18 +7,13 @@ export const RecordFormSchema = z.object({
   value: z.string().min(1),
 })
 
-export const RecordRequestSchema = z.object({
-  name: z.string(),
-  value: z.string(),
-})
-
-export const CreateRecordRequestSchema = RecordRequestSchema.merge(
+export const CreateRecordRequestSchema = RecordFormSchema.merge(
   z.object({
     item_id: z.number(),
   })
 )
 
-export const UpdateRecordRequestSchema = RecordRequestSchema.merge(
+export const UpdateRecordRequestSchema = RecordFormSchema.merge(
   z.object({
     id: z.number(),
   })
