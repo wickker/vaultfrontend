@@ -94,14 +94,14 @@ const Item = () => {
     <Page
       hideFooter
       header={
-        <div className='bg-app-background flex items-center gap-x-6 p-6'>
+        <div className='bg-app-background flex w-0 min-w-full items-center gap-x-6 p-6'>
           <Button
             icon={<IoChevronBack className='h-5 w-5' />}
             className='rounded-full p-2'
             variant={ButtonVariant.SECONDARY}
             onClick={handleGoBack}
           />
-          <h1 className='text-3xl font-semibold'>
+          <h1 className='truncate text-3xl font-semibold'>
             {getRecords.data?.name || ''}
           </h1>
         </div>
