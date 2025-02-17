@@ -31,7 +31,7 @@ const ItemTile = ({ item }: ItemTileProps) => {
 
   return (
     <div
-      className='grid grid-cols-[auto_1fr_auto] items-center gap-x-3 rounded-md bg-white p-4 text-left'
+      className='grid grid-cols-[auto_1fr_auto] items-center gap-x-3 rounded-md bg-white p-4 text-left hover:cursor-pointer'
       onClick={handleClickTile}
     >
       <div
@@ -48,7 +48,7 @@ const ItemTile = ({ item }: ItemTileProps) => {
         </p>
       </div>
 
-      <button onClick={handleEdit}>
+      <button onClick={handleEdit} className='hover:cursor-pointer'>
         <FiEdit className='h-6 w-6 text-slate-500' />
       </button>
     </div>

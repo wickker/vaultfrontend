@@ -70,6 +70,7 @@ const Item = () => {
             showValue={!recordIdsToHide.has(record.id)}
             onToggleValueDisplay={toggleValueDisplay}
             onCopy={() => copyToClipboard(record.value, toast)}
+            itemId={itemId}
             key={record.id}
           />
         ))}

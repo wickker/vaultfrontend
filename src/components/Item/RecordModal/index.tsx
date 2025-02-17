@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm, Controller } from 'react-hook-form'
+import { BsTrash } from 'react-icons/bs'
 import { RxCross2 } from 'react-icons/rx'
 import { Location, useLocation, useNavigate } from 'react-router'
 import { AppLocation } from '@/@types/commons'
@@ -19,13 +20,19 @@ export type RecordModalProps = {
 }
 
 const RecordModal = () => {
+  // props
   const location: Location<AppLocation<RecordModalProps>> = useLocation()
   const itemId = location.state.props.itemId
+  const record = location.state.props.record
+
+  // form
   const navigate = useNavigate()
-  const defaultValues = {
-    name: RecordType.PASSWORD,
-    value: '',
-  }
+  const defaultValues = record
+    ? { name: record.name as RecordType, value: record.value }
+    : {
+        name: RecordType.PASSWORD,
+        value: '',
+      }
   const {
     control,
     register,
@@ -41,6 +48,9 @@ const RecordModal = () => {
   const firstInputRef = useRef<HTMLInputElement | null>(null)
   const { ref, ...rest } = register('value')
   const name = watch('name')
+  const title = record ? 'Update Record' : 'Add Record'
+
+  // query
   const queryClient = useQueryClient()
   const { useCreateRecordMutation } = useRecord()
   const createRecord = useCreateRecordMutation(createRecordSuccessCb)
@@ -72,16 +82,21 @@ const RecordModal = () => {
         <ModalFooter
           onCancel={handleCancel}
           onSave={handleSave}
-          // isSaveLoading
-          // isSaveDisabled
+          isSaveLoading={createRecord.isPending}
         />
       }
       header={
         <div className='text-app-default flex items-center justify-between p-6'>
-          <h1 className='text-3xl font-semibold'>Add Record</h1>
-          <button className='hover:cursor-pointer' onClick={handleCancel}>
-            <RxCross2 className='h-9 w-9' />
-          </button>
+          <h1 className='text-3xl font-semibold'>{title}</h1>
+          {record ? (
+            <button className='hover:cursor-pointer' onClick={() => {}}>
+              <BsTrash className='text-app-danger h-7 w-7' />
+            </button>
+          ) : (
+            <button className='hover:cursor-pointer' onClick={handleCancel}>
+              <RxCross2 className='h-9 w-9' />
+            </button>
+          )}
         </div>
       }
     >
