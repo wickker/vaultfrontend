@@ -81,7 +81,7 @@ const App = () => {
   })
 
   return (
-    <div className='font-noto-sans'>
+    <div className='font-noto-sans isolate'>
       <ToastProvider>
         <QueryClientProvider client={client}>
           <BrowserRouter>

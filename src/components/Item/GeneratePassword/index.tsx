@@ -40,7 +40,7 @@ const GeneratePassword = ({ onAutofill }: GeneratePasswordProps) => {
     try {
       const length = parseInt(config.length)
       if (!length) {
-        throw new Error('Invalid password length input.')
+        throw new Error('Invalid password characters input.')
       }
       const password = generatePasswordLite({
         numbers: config.numbers,

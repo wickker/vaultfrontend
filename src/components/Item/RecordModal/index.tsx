@@ -3,11 +3,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, Controller } from 'react-hook-form'
 import { RxCross2 } from 'react-icons/rx'
 import { Location, useLocation, useNavigate } from 'react-router'
-import GeneratePassword from '../GeneratePassword'
 import { AppLocation } from '@/@types/commons'
 import { Record, RecordFormSchema } from '@/@types/records'
 import { FormItem, Input, Modal, Select } from '@/components/commons'
 import ModalFooter from '@/components/commons/ModalFooter'
+import GeneratePassword from '@/components/Item/GeneratePassword'
 import { RecordType } from '@/utils/constants/enums'
 
 export type RecordModalProps = {

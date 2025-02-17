@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { RxCrossCircled } from 'react-icons/rx'
 import { RxCross2 } from 'react-icons/rx'
 import { Button } from '@/components/commons'
+import { ButtonVariant } from '@/components/commons/Button/types'
 
 type ModalConfirmDeleteProps = {
   isVisible: boolean
@@ -45,7 +46,7 @@ const ModalConfirmDelete = ({
                   </p>
 
                   <div className='flex w-full items-center justify-around'>
-                    <Button variant='secondary' onClick={onClose}>
+                    <Button variant={ButtonVariant.SECONDARY} onClick={onClose}>
                       Cancel
                     </Button>
                     <Button onClick={onConfirm} isLoading={isLoading}>
