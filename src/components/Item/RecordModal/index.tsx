@@ -35,8 +35,7 @@ const RecordModal = () => {
 
   // props
   const location: Location<AppLocation<RecordModalProps>> = useLocation()
-  const itemId = location.state.props.itemId
-  const record = location.state.props.record
+  const { itemId, record } = location.state.props
 
   // form
   const navigate = useNavigate()

@@ -3,16 +3,17 @@ import { DateTime } from 'luxon'
 import { FiEdit } from 'react-icons/fi'
 import { useLocation, useNavigate } from 'react-router'
 import { AppLocation } from '@/@types/commons'
-import { Item } from '@/@types/items'
+import { GetItemsRequest, Item } from '@/@types/items'
 import { ItemModalProps } from '@/components/Main/Dashboard/ItemModal'
 import { RelativeRoute, Route } from '@/utils/constants/enums'
 import { getRandomPastelColor } from '@/utils/functions/commons'
 
 type ItemTileProps = {
   item: Item
+  queryKey: readonly ['items', GetItemsRequest]
 }
 
-const ItemTile = ({ item }: ItemTileProps) => {
+const ItemTile = ({ item, queryKey }: ItemTileProps) => {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -20,7 +21,7 @@ const ItemTile = ({ item }: ItemTileProps) => {
     e.stopPropagation()
     navigate(RelativeRoute.MODAL, {
       state: {
-        props: { item },
+        props: { item, queryKey },
         previousLocation: location,
       } satisfies AppLocation<ItemModalProps>,
     })

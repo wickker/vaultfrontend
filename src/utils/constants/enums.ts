@@ -24,3 +24,13 @@ export const RecordType = {
 } as const
 
 export type RecordType = (typeof RecordType)[keyof typeof RecordType]
+
+export const GetItemsOrderBy = {
+  CREATED_AT_ASC: 'created_at_asc',
+  CREATED_AT_DESC: 'created_at_desc',
+  NAME_ASC: 'name_asc',
+  NAME_DESC: 'name_desc',
+} as const
+
+export type GetItemsOrderBy =
+  (typeof GetItemsOrderBy)[keyof typeof GetItemsOrderBy]

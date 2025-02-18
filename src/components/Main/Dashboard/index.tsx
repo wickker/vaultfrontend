@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { RiLoader4Line } from 'react-icons/ri'
 import { useLocation, useNavigate } from 'react-router'
@@ -7,19 +7,38 @@ import ItemTile from './ItemTile'
 import { AppLocation } from '@/@types/commons'
 import { Button, NoItemsYet, Page, SearchHeader } from '@/components/commons'
 import useItem from '@/hooks/queries/useItem'
-import { RelativeRoute } from '@/utils/constants/enums'
+import { GetItemsOrderBy, RelativeRoute } from '@/utils/constants/enums'
+import { QUERY_KEYS } from '@/utils/constants/queryKeys'
 
 const Dashboard = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const [searchPhrase, setSearchPhrase] = useState<string>()
+  const [orderBy] = useState(GetItemsOrderBy.NAME_ASC)
   const { useGetItemsQuery } = useItem()
-  const getItems = useGetItemsQuery()
+  const request = {
+    search_phrase: searchPhrase,
+    order_by: orderBy,
+  }
+  const queryKey = QUERY_KEYS.GET_ITEMS(request)
+  const getItems = useGetItemsQuery(request)
   const hasItems = getItems.isSuccess && getItems.data.length > 0
+
+  const handleSearchChange = (s: string) => {
+    const trimmed = s.trim()
+    if (!trimmed) {
+      setSearchPhrase(undefined)
+      return
+    }
+    setSearchPhrase(trimmed)
+  }
 
   const handleAddItem = () =>
     navigate(RelativeRoute.MODAL, {
       state: {
-        props: {},
+        props: {
+          queryKey,
+        },
         previousLocation: location,
       } satisfies AppLocation<ItemModalProps>,
     })
@@ -27,8 +46,9 @@ const Dashboard = () => {
   const items = useMemo(
     () =>
       (getItems.data || []).map((item) => (
-        <ItemTile item={item} key={item.id} />
+        <ItemTile item={item} key={item.id} queryKey={queryKey} />
       )),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [getItems.data]
   )
 
@@ -37,6 +57,15 @@ const Dashboard = () => {
       return (
         <div className='bg-app-background flex h-full w-full items-center justify-center'>
           <RiLoader4Line className='h-10 w-10 animate-spin text-slate-400' />
+        </div>
+      )
+
+    if (!hasItems && searchPhrase)
+      return (
+        <div className='bg-app-background flex h-full w-full items-center justify-center'>
+          <p className='text-slate-500'>
+            No search results found for {searchPhrase}.
+          </p>
         </div>
       )
 
@@ -53,7 +82,7 @@ const Dashboard = () => {
     <Page
       header={
         <SearchHeader
-          onSearchChange={() => {}}
+          onSearchChange={handleSearchChange}
           isSearchDisabled={getItems.isFetching}
         />
       }

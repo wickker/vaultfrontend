@@ -6,7 +6,7 @@ import { BsTrash } from 'react-icons/bs'
 import { RxCross2 } from 'react-icons/rx'
 import { Location, useLocation, useNavigate } from 'react-router'
 import { AppLocation } from '@/@types/commons'
-import { Item, ItemFormSchema } from '@/@types/items'
+import { GetItemsRequest, Item, ItemFormSchema } from '@/@types/items'
 import {
   FormItem,
   Input,
@@ -15,15 +15,15 @@ import {
 } from '@/components/commons'
 import ModalFooter from '@/components/commons/ModalFooter'
 import useItem from '@/hooks/queries/useItem'
-import { QUERY_KEYS } from '@/utils/constants/queryKeys'
 
 export type ItemModalProps = {
+  queryKey: readonly ['items', GetItemsRequest]
   item?: Item
 }
 
 const ItemModal = () => {
   const location: Location<AppLocation<ItemModalProps>> = useLocation()
-  const item = location.state.props.item
+  const { item, queryKey } = location.state.props
   const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] =
     useState(false)
   const defaultValues = {
@@ -53,7 +53,7 @@ const ItemModal = () => {
   const title = item ? 'Update Item' : 'Add Item'
 
   function deleteItemSuccessCb() {
-    queryClient.setQueryData(QUERY_KEYS.GET_ITEMS, (items: Array<Item>) =>
+    queryClient.setQueryData(queryKey, (items: Array<Item>) =>
       items.filter((i) => i.id !== item?.id)
     )
     setIsDeleteConfirmationVisible(false)
@@ -61,12 +61,12 @@ const ItemModal = () => {
   }
 
   function createItemSuccessCb() {
-    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.GET_ITEMS })
+    queryClient.invalidateQueries({ queryKey })
     handleCancel()
   }
 
   function updateItemSuccessCb(d: Item) {
-    queryClient.setQueryData(QUERY_KEYS.GET_ITEMS, (items: Array<Item>) =>
+    queryClient.setQueryData(queryKey, (items: Array<Item>) =>
       items.map((i) => (i.id === d.id ? { ...i, name: d.name } : i))
     )
     handleCancel()
