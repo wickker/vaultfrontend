@@ -5,11 +5,11 @@ import { Route } from '@/utils/constants/enums'
 
 const AuthGuard = ({ children }: PropsWithChildren) => {
   const navigate = useNavigate()
-  const { isSignedIn } = useAuth()
+  const { isSignedIn, isLoaded } = useAuth()
 
   useEffect(() => {
-    if (!isSignedIn) navigate(Route.DASHBOARD)
-  }, [isSignedIn, navigate])
+    if (isLoaded && !isSignedIn) navigate(Route.DASHBOARD)
+  }, [isSignedIn, navigate, isLoaded])
 
   return <SignedIn>{children}</SignedIn>
 }
