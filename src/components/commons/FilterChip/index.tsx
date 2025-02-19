@@ -1,5 +1,5 @@
 import { MouseEvent, PropsWithChildren, useState } from 'react'
-import { Chip, FilterOptions, Menu } from '@/components/commons'
+import { Chip, Options, Menu } from '@/components/commons'
 import { SelectOption } from '@/components/commons/Select'
 
 type FilterChipProps<T = string> = {
@@ -41,11 +41,7 @@ const FilterChip = <T,>({
       </Chip>
 
       <Menu isVisible={isVisible} onClose={() => setIsVisible(false)}>
-        <FilterOptions
-          options={options}
-          value={value}
-          onSelect={handleSelect}
-        />
+        <Options options={options} value={value} onSelect={handleSelect} />
       </Menu>
     </>
   )

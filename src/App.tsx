@@ -14,6 +14,7 @@ import {
 } from 'react-router'
 import { registerSW } from 'virtual:pwa-register'
 import { AppLocation } from './@types/commons'
+import Categories from './components/Categories'
 import { AuthGuard, Toast } from './components/commons'
 import Fallback from './components/Fallback'
 import Item from './components/Item'
@@ -29,7 +30,7 @@ import { Route as AppRoute, RelativeRoute } from './utils/constants/enums'
 const ClerkAndRoutes = () => {
   const location: Location<AppLocation> = useLocation()
   const previousLocation = location.state?.previousLocation
-  const { DASHBOARD, ITEMS, PROFILE } = AppRoute
+  const { DASHBOARD, ITEMS, PROFILE, CATEGORIES } = AppRoute
 
   return (
     <ClerkProvider
@@ -52,6 +53,14 @@ const ClerkAndRoutes = () => {
           element={
             <AuthGuard>
               <Profile />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path={CATEGORIES}
+          element={
+            <AuthGuard>
+              <Categories />
             </AuthGuard>
           }
         />

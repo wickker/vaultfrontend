@@ -1,6 +1,6 @@
 import { MouseEvent, useState } from 'react'
 import { FaChevronDown } from 'react-icons/fa6'
-import { FilterOptions, Menu } from '@/components/commons'
+import { Options, Menu } from '@/components/commons'
 
 export type SelectOption<T = string> = {
   text: string
@@ -36,11 +36,7 @@ const Select = <T,>({ options = [], value, onChange }: SelectProps<T>) => {
   return (
     <>
       <Menu isVisible={isVisible} onClose={() => setIsVisible(false)}>
-        <FilterOptions
-          options={options}
-          value={value}
-          onSelect={handleSelect}
-        />
+        <Options options={options} value={value} onSelect={handleSelect} />
       </Menu>
 
       <button

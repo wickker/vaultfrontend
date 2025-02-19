@@ -1,4 +1,5 @@
 export const Route = {
+  CATEGORIES: '/categories',
   DASHBOARD: '/',
   ITEMS: '/items',
   PROFILE: '/profile',

@@ -3,17 +3,13 @@ import { FaCheck } from 'react-icons/fa'
 import { SelectOption } from '@/components/commons/Select'
 import { mc } from '@/utils/functions/commons'
 
-type FilterOptionsProps<T = string> = {
+type OptionsProps<T = string> = {
   options: Array<SelectOption<T>>
   value: T
   onSelect: (v: T) => void
 }
 
-const FilterOptions = <T,>({
-  options,
-  value,
-  onSelect,
-}: FilterOptionsProps<T>) =>
+const Options = <T,>({ options, value, onSelect }: OptionsProps<T>) =>
   options.map((o) => {
     const isSelected = o.value === value
 
@@ -40,4 +36,4 @@ const FilterOptions = <T,>({
     )
   })
 
-export default FilterOptions
+export default Options
