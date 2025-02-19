@@ -17,7 +17,7 @@ const Chips = ({
   const orderByLabel = `Sort by: ${ORDER_BY_LABELS_MAP[orderBy]}`
 
   return (
-    <div className='bg-app-background flex items-center px-6 pt-2 pb-2'>
+    <div className='flex items-center px-6'>
       <FilterChip<GetItemsOrderBy>
         value={orderBy}
         options={Object.values(GetItemsOrderBy).map((o) => ({
