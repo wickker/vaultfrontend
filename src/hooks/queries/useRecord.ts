@@ -14,7 +14,7 @@ const path = '/records'
 const useRecord = () => {
   const { getToken } = useAuth()
 
-  const useGetRecordsByItem = (itemId: number) =>
+  const useGetRecordsByItemQuery = (itemId: number) =>
     useQuery({
       queryKey: QUERY_KEYS.GET_RECORDS(itemId),
       queryFn: async (): Promise<GetRecordsByItemResponse> => {
@@ -76,7 +76,7 @@ const useRecord = () => {
   return {
     useCreateRecordMutation,
     useDeleteRecordMutation,
-    useGetRecordsByItem,
+    useGetRecordsByItemQuery,
     useUpdateRecordMutation,
   }
 }

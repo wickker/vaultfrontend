@@ -20,8 +20,8 @@ const Item = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const itemId = parseInt(atob(id || ''))
-  const { useGetRecordsByItem } = useRecord()
-  const getRecords = useGetRecordsByItem(itemId)
+  const { useGetRecordsByItemQuery } = useRecord()
+  const getRecords = useGetRecordsByItemQuery(itemId)
   const hasRecords = getRecords.isSuccess && getRecords.data.records.length > 0
 
   const handleGoBack = () => navigate(Route.DASHBOARD)
