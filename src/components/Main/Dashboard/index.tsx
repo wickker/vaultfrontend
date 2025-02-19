@@ -77,7 +77,7 @@ const Dashboard = () => {
     if (!hasItems) return <NoItemsYet />
 
     return (
-      <div className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pt-2 pb-22'>
+      <div className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pb-22'>
         {items}
       </div>
     )
@@ -86,7 +86,7 @@ const Dashboard = () => {
   return (
     <Page
       header={
-        <div>
+        <div className='bg-app-background pb-5'>
           <SearchHeader
             onSearchChange={handleSearchChange}
             isSearchDisabled={getItems.isFetching}
