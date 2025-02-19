@@ -1,8 +1,6 @@
-import { Fragment, MouseEvent, useState } from 'react'
+import { MouseEvent, useState } from 'react'
 import { FaChevronDown } from 'react-icons/fa6'
-import { FaCheck } from 'react-icons/fa6'
-import { Menu } from '@/components/commons'
-import { mc } from '@/utils/functions/commons'
+import { FilterOptions, Menu } from '@/components/commons'
 
 export type SelectOption<T = string> = {
   text: string
@@ -31,29 +29,11 @@ const Select = <T,>({ options = [], value, onChange }: SelectProps<T>) => {
   return (
     <>
       <Menu isVisible={isVisible} onClose={() => setIsVisible(false)}>
-        {options.map((o) => {
-          const isSelected = o.value === value
-
-          return (
-            <Fragment key={`${o.value}`}>
-              <button
-                className='grid w-full grid-cols-[1fr_auto] items-center gap-x-2 py-3'
-                onClick={() => handleSelect(o.value)}
-              >
-                <p
-                  className={mc(
-                    'text-app-default truncate text-left',
-                    isSelected && 'font-semibold'
-                  )}
-                >
-                  {o.text}
-                </p>
-                {isSelected && <FaCheck className='h-5 w-5 text-[#50d764]' />}
-              </button>
-              <div className='h-[1px] w-full bg-slate-200' />
-            </Fragment>
-          )
-        })}
+        <FilterOptions
+          options={options}
+          value={value}
+          onSelect={handleSelect}
+        />
       </Menu>
 
       <button

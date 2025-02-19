@@ -1,34 +1,59 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { RiLoader4Line } from 'react-icons/ri'
 import { useLocation, useNavigate } from 'react-router'
+import Chips from './Chips'
 import { ItemModalProps } from './ItemModal'
 import ItemTile from './ItemTile'
 import { AppLocation } from '@/@types/commons'
 import { Button, NoItemsYet, Page, SearchHeader } from '@/components/commons'
 import useItem from '@/hooks/queries/useItem'
-import { RelativeRoute } from '@/utils/constants/enums'
+import { GetItemsOrderBy, RelativeRoute } from '@/utils/constants/enums'
+import { QUERY_KEYS } from '@/utils/constants/queryKeys'
 
 const Dashboard = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const [searchPhrase, setSearchPhrase] = useState<string>()
+  const [orderBy, setOrderBy] = useState<GetItemsOrderBy>(
+    GetItemsOrderBy.NAME_ASC
+  )
   const { useGetItemsQuery } = useItem()
-  const getItems = useGetItemsQuery()
+  const request = {
+    search_phrase: searchPhrase,
+    order_by: orderBy,
+  }
+  const queryKey = QUERY_KEYS.GET_ITEMS(request)
+  const getItems = useGetItemsQuery(request)
   const hasItems = getItems.isSuccess && getItems.data.length > 0
+
+  const handleSearchChange = (s: string) => {
+    const trimmed = s.trim()
+    if (!trimmed) {
+      setSearchPhrase(undefined)
+      return
+    }
+    setSearchPhrase(trimmed)
+  }
 
   const handleAddItem = () =>
     navigate(RelativeRoute.MODAL, {
       state: {
-        props: {},
+        props: {
+          queryKey,
+        },
         previousLocation: location,
       } satisfies AppLocation<ItemModalProps>,
     })
 
+  const handleOrderByChange = (v: GetItemsOrderBy) => setOrderBy(v)
+
   const items = useMemo(
     () =>
       (getItems.data || []).map((item) => (
-        <ItemTile item={item} key={item.id} />
+        <ItemTile item={item} key={item.id} queryKey={queryKey} />
       )),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [getItems.data]
   )
 
@@ -40,10 +65,19 @@ const Dashboard = () => {
         </div>
       )
 
+    if (!hasItems && searchPhrase)
+      return (
+        <div className='bg-app-background flex h-full w-full items-center justify-center'>
+          <p className='text-slate-500'>
+            No search results found for {searchPhrase}
+          </p>
+        </div>
+      )
+
     if (!hasItems) return <NoItemsYet />
 
     return (
-      <div className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pt-6 pb-22'>
+      <div className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pt-2 pb-22'>
         {items}
       </div>
     )
@@ -52,10 +86,13 @@ const Dashboard = () => {
   return (
     <Page
       header={
-        <SearchHeader
-          onSearchChange={() => {}}
-          isSearchDisabled={getItems.isFetching}
-        />
+        <div>
+          <SearchHeader
+            onSearchChange={handleSearchChange}
+            isSearchDisabled={getItems.isFetching}
+          />
+          <Chips orderBy={orderBy} onOrderByChange={handleOrderByChange} />
+        </div>
       }
       className='relative'
     >

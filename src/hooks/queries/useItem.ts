@@ -1,6 +1,6 @@
 import { useAuth } from '@clerk/clerk-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Item, UpdateItemRequest } from '@/@types/items'
+import { GetItemsRequest, Item, UpdateItemRequest } from '@/@types/items'
 import { vaultApi } from '@/services'
 import { QUERY_KEYS } from '@/utils/constants/queryKeys'
 
@@ -9,14 +9,15 @@ const path = '/items'
 const useItem = () => {
   const { getToken } = useAuth()
 
-  const useGetItemsQuery = () =>
+  const useGetItemsQuery = (request: GetItemsRequest) =>
     useQuery({
-      queryKey: QUERY_KEYS.GET_ITEMS,
+      queryKey: QUERY_KEYS.GET_ITEMS(request),
       queryFn: async (): Promise<Array<Item>> => {
         const res = await vaultApi.get(path, {
           headers: {
             Authorization: `Bearer ${await getToken()}`,
           },
+          params: request,
         })
         return res.data
       },

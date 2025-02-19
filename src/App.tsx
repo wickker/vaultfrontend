@@ -14,7 +14,7 @@ import {
 } from 'react-router'
 import { registerSW } from 'virtual:pwa-register'
 import { AppLocation } from './@types/commons'
-import { Toast } from './components/commons'
+import { AuthGuard, Toast } from './components/commons'
 import Fallback from './components/Fallback'
 import Item from './components/Item'
 import RecordModal from './components/Item/RecordModal'
@@ -38,20 +38,42 @@ const ClerkAndRoutes = () => {
     >
       <Routes location={previousLocation || location}>
         <Route path={DASHBOARD} element={<Main />} />
-        <Route path={`${ITEMS}/:id`} element={<Item />}></Route>
-        <Route path={PROFILE} element={<Profile />} />
         <Route path='*' element={<Fallback />} />
+        <Route
+          path={`${ITEMS}/:id`}
+          element={
+            <AuthGuard>
+              <Item />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path={PROFILE}
+          element={
+            <AuthGuard>
+              <Profile />
+            </AuthGuard>
+          }
+        />
       </Routes>
 
       {previousLocation && (
         <Routes>
           <Route
             path={`${DASHBOARD}${RelativeRoute.MODAL}`}
-            element={<ItemModal />}
+            element={
+              <AuthGuard>
+                <ItemModal />
+              </AuthGuard>
+            }
           />
           <Route
             path={`${ITEMS}/:id/${RelativeRoute.MODAL}`}
-            element={<RecordModal />}
+            element={
+              <AuthGuard>
+                <RecordModal />
+              </AuthGuard>
+            }
           />
         </Routes>
       )}
