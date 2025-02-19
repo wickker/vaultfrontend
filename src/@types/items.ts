@@ -20,7 +20,7 @@ export const GetItemsRequestSchema = z.object({
 // Responses
 export const ItemSchema = z
   .object({
-    createdAt: z.string(),
+    created_at: z.string(),
   })
   .merge(UpdateItemRequestSchema)
 
