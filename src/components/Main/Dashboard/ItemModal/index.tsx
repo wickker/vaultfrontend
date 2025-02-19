@@ -13,8 +13,8 @@ import {
   Modal,
   ModalConfirmDelete,
   Select,
+  ModalFooter,
 } from '@/components/commons'
-import ModalFooter from '@/components/commons/ModalFooter'
 import useCategory from '@/hooks/queries/useCategory'
 import useItem from '@/hooks/queries/useItem'
 
