@@ -18,6 +18,7 @@ const Dashboard = () => {
   const [orderBy, setOrderBy] = useState<GetItemsOrderBy>(
     GetItemsOrderBy.NAME_ASC
   )
+  const [categoryId] = useState(0)
   const { useGetItemsQuery } = useItem()
   const request = {
     search_phrase: searchPhrase,
@@ -26,6 +27,7 @@ const Dashboard = () => {
   const queryKey = QUERY_KEYS.GET_ITEMS(request)
   const getItems = useGetItemsQuery(request)
   const hasItems = getItems.isSuccess && getItems.data.length > 0
+  const selectedCategoryId = categoryId === 0 ? 1 : categoryId
 
   const handleSearchChange = (s: string) => {
     const trimmed = s.trim()
@@ -41,6 +43,7 @@ const Dashboard = () => {
       state: {
         props: {
           queryKey,
+          categoryId: selectedCategoryId,
         },
         previousLocation: location,
       } satisfies AppLocation<ItemModalProps>,
@@ -51,7 +54,12 @@ const Dashboard = () => {
   const items = useMemo(
     () =>
       (getItems.data || []).map((item) => (
-        <ItemTile item={item} key={item.id} queryKey={queryKey} />
+        <ItemTile
+          item={item}
+          key={item.id}
+          queryKey={queryKey}
+          categoryId={selectedCategoryId}
+        />
       )),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [getItems.data]

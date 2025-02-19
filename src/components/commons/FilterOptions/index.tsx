@@ -31,7 +31,9 @@ const FilterOptions = <T,>({
           >
             {o.text}
           </p>
-          {isSelected && <FaCheck className='h-5 w-5 text-[#50d764]' />}
+          {isSelected && (
+            <FaCheck className='h-5 w-5 font-normal text-[#50d764]' />
+          )}
         </button>
         <div className='h-[1px] w-full bg-slate-200' />
       </Fragment>

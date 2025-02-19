@@ -1,6 +1,11 @@
 import { useAuth } from '@clerk/clerk-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { GetItemsRequest, Item, UpdateItemRequest } from '@/@types/items'
+import {
+  CreateItemRequest,
+  GetItemsRequest,
+  Item,
+  UpdateItemRequest,
+} from '@/@types/items'
 import { vaultApi } from '@/services'
 import { QUERY_KEYS } from '@/utils/constants/queryKeys'
 
@@ -26,16 +31,12 @@ const useItem = () => {
 
   const useCreateItemMutation = (onSuccess: () => void) =>
     useMutation({
-      mutationFn: async (name: string): Promise<Item> => {
-        const res = await vaultApi.post(
-          path,
-          { name },
-          {
-            headers: {
-              Authorization: `Bearer ${await getToken()}`,
-            },
-          }
-        )
+      mutationFn: async (request: CreateItemRequest): Promise<Item> => {
+        const res = await vaultApi.post(path, request, {
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        })
         return res.data
       },
       onSuccess,

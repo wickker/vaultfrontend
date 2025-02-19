@@ -11,9 +11,10 @@ import { getRandomPastelColor } from '@/utils/functions/commons'
 type ItemTileProps = {
   item: Item
   queryKey: readonly ['items', GetItemsRequest]
+  categoryId: number
 }
 
-const ItemTile = ({ item, queryKey }: ItemTileProps) => {
+const ItemTile = ({ item, queryKey, categoryId }: ItemTileProps) => {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -21,7 +22,7 @@ const ItemTile = ({ item, queryKey }: ItemTileProps) => {
     e.stopPropagation()
     navigate(RelativeRoute.MODAL, {
       state: {
-        props: { item, queryKey },
+        props: { item, queryKey, categoryId },
         previousLocation: location,
       } satisfies AppLocation<ItemModalProps>,
     })
@@ -45,7 +46,9 @@ const ItemTile = ({ item, queryKey }: ItemTileProps) => {
       <div className='flex w-0 min-w-full flex-col gap-y-0.5'>
         <p className='text-app-default truncate font-semibold'>{item.name}</p>
         <p className='truncate text-sm text-slate-500'>
-          {DateTime.fromJSDate(new Date(item.createdAt)).toFormat('d MMM yyyy')}
+          {DateTime.fromJSDate(new Date(item.created_at)).toFormat(
+            'd MMM yyyy'
+          )}
         </p>
       </div>
 
