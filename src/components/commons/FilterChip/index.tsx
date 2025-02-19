@@ -1,7 +1,6 @@
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, PropsWithChildren, useState } from 'react'
 import { Chip, FilterOptions, Menu } from '@/components/commons'
 import { SelectOption } from '@/components/commons/Select'
-// import { FaChevronDown } from 'react-icons/fa6'
 
 type FilterChipProps<T = string> = {
   isDisabled?: boolean
@@ -9,7 +8,7 @@ type FilterChipProps<T = string> = {
   options: Array<SelectOption<T>>
   value: T
   onChange: (v: T) => void
-}
+} & PropsWithChildren
 
 const FilterChip = <T,>({
   isDisabled = false,
@@ -17,6 +16,7 @@ const FilterChip = <T,>({
   options = [],
   value,
   onChange,
+  children,
 }: FilterChipProps<T>) => {
   const [isVisible, setIsVisible] = useState(false)
 
@@ -37,7 +37,7 @@ const FilterChip = <T,>({
         isActive={isActive}
         onClick={handleOpenSelect}
       >
-        Sort By
+        {children}
       </Chip>
 
       <Menu isVisible={isVisible} onClose={() => setIsVisible(false)}>

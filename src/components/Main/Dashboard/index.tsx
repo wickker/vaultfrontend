@@ -2,16 +2,11 @@ import { useMemo, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { RiLoader4Line } from 'react-icons/ri'
 import { useLocation, useNavigate } from 'react-router'
+import Chips from './Chips'
 import { ItemModalProps } from './ItemModal'
 import ItemTile from './ItemTile'
 import { AppLocation } from '@/@types/commons'
-import {
-  Button,
-  FilterChip,
-  NoItemsYet,
-  Page,
-  SearchHeader,
-} from '@/components/commons'
+import { Button, NoItemsYet, Page, SearchHeader } from '@/components/commons'
 import useItem from '@/hooks/queries/useItem'
 import { GetItemsOrderBy, RelativeRoute } from '@/utils/constants/enums'
 import { QUERY_KEYS } from '@/utils/constants/queryKeys'
@@ -51,7 +46,7 @@ const Dashboard = () => {
       } satisfies AppLocation<ItemModalProps>,
     })
 
-  const handleChangeOrderBy = (v: GetItemsOrderBy) => setOrderBy(v)
+  const handleOrderByChange = (v: GetItemsOrderBy) => setOrderBy(v)
 
   const items = useMemo(
     () =>
@@ -96,16 +91,7 @@ const Dashboard = () => {
             onSearchChange={handleSearchChange}
             isSearchDisabled={getItems.isFetching}
           />
-          <div className='bg-app-background flex items-center px-6 pt-2 pb-2'>
-            <FilterChip<GetItemsOrderBy>
-              value={orderBy}
-              options={Object.values(GetItemsOrderBy).map((o) => ({
-                text: o,
-                value: o,
-              }))}
-              onChange={handleChangeOrderBy}
-            />
-          </div>
+          <Chips orderBy={orderBy} onOrderByChange={handleOrderByChange} />
         </div>
       }
       className='relative'
