@@ -22,10 +22,14 @@ export type ItemModalProps = {
 }
 
 const ItemModal = () => {
-  const location: Location<AppLocation<ItemModalProps>> = useLocation()
-  const { item, queryKey } = location.state.props
   const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] =
     useState(false)
+
+  // props
+  const location: Location<AppLocation<ItemModalProps>> = useLocation()
+  const { item, queryKey } = location.state.props
+
+  // form
   const defaultValues = {
     name: item ? item.name : '',
   }
@@ -38,10 +42,13 @@ const ItemModal = () => {
     resolver: zodResolver(ItemFormSchema),
     values: defaultValues,
   })
-  const queryClient = useQueryClient()
   const firstInputRef = useRef<HTMLInputElement | null>(null)
   const { ref, ...rest } = register('name')
   const navigate = useNavigate()
+  const title = item ? 'Update Item' : 'Add Item'
+
+  // query
+  const queryClient = useQueryClient()
   const {
     useCreateItemMutation,
     useUpdateItemMutation,
@@ -50,7 +57,6 @@ const ItemModal = () => {
   const createItem = useCreateItemMutation(createItemSuccessCb)
   const updateItem = useUpdateItemMutation(updateItemSuccessCb)
   const deleteItem = useDeleteItemMutation(deleteItemSuccessCb)
-  const title = item ? 'Update Item' : 'Add Item'
 
   function deleteItemSuccessCb() {
     queryClient.setQueryData(queryKey, (items: Array<Item>) =>

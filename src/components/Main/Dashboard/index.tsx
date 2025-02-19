@@ -5,7 +5,13 @@ import { useLocation, useNavigate } from 'react-router'
 import { ItemModalProps } from './ItemModal'
 import ItemTile from './ItemTile'
 import { AppLocation } from '@/@types/commons'
-import { Button, NoItemsYet, Page, SearchHeader } from '@/components/commons'
+import {
+  Button,
+  FilterChip,
+  NoItemsYet,
+  Page,
+  SearchHeader,
+} from '@/components/commons'
 import useItem from '@/hooks/queries/useItem'
 import { GetItemsOrderBy, RelativeRoute } from '@/utils/constants/enums'
 import { QUERY_KEYS } from '@/utils/constants/queryKeys'
@@ -14,7 +20,9 @@ const Dashboard = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const [searchPhrase, setSearchPhrase] = useState<string>()
-  const [orderBy] = useState(GetItemsOrderBy.NAME_ASC)
+  const [orderBy, setOrderBy] = useState<GetItemsOrderBy>(
+    GetItemsOrderBy.NAME_ASC
+  )
   const { useGetItemsQuery } = useItem()
   const request = {
     search_phrase: searchPhrase,
@@ -42,6 +50,8 @@ const Dashboard = () => {
         previousLocation: location,
       } satisfies AppLocation<ItemModalProps>,
     })
+
+  const handleChangeOrderBy = (v: GetItemsOrderBy) => setOrderBy(v)
 
   const items = useMemo(
     () =>
@@ -72,7 +82,7 @@ const Dashboard = () => {
     if (!hasItems) return <NoItemsYet />
 
     return (
-      <div className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pt-6 pb-22'>
+      <div className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pt-2 pb-22'>
         {items}
       </div>
     )
@@ -81,10 +91,22 @@ const Dashboard = () => {
   return (
     <Page
       header={
-        <SearchHeader
-          onSearchChange={handleSearchChange}
-          isSearchDisabled={getItems.isFetching}
-        />
+        <div>
+          <SearchHeader
+            onSearchChange={handleSearchChange}
+            isSearchDisabled={getItems.isFetching}
+          />
+          <div className='bg-app-background flex items-center px-6 pt-2 pb-2'>
+            <FilterChip<GetItemsOrderBy>
+              value={orderBy}
+              options={Object.values(GetItemsOrderBy).map((o) => ({
+                text: o,
+                value: o,
+              }))}
+              onChange={handleChangeOrderBy}
+            />
+          </div>
+        </div>
       }
       className='relative'
     >
