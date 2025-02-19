@@ -6,9 +6,14 @@ import { GetItemsOrderBy } from '@/utils/constants/enums'
 type ChipsProps = {
   orderBy: GetItemsOrderBy
   onOrderByChange: (v: GetItemsOrderBy) => void
+  isDisabled: boolean
 }
 
-const Chips = ({ orderBy, onOrderByChange }: ChipsProps) => {
+const Chips = ({
+  orderBy,
+  onOrderByChange,
+  isDisabled = false,
+}: ChipsProps) => {
   const orderByLabel = `Sort by: ${ORDER_BY_LABELS_MAP[orderBy]}`
 
   return (
@@ -20,6 +25,7 @@ const Chips = ({ orderBy, onOrderByChange }: ChipsProps) => {
           value: o,
         }))}
         onChange={onOrderByChange}
+        isDisabled={isDisabled}
       >
         {orderByLabel}
         <FaChevronDown />

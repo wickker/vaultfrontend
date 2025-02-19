@@ -91,7 +91,11 @@ const Dashboard = () => {
             onSearchChange={handleSearchChange}
             isSearchDisabled={getItems.isFetching}
           />
-          <Chips orderBy={orderBy} onOrderByChange={handleOrderByChange} />
+          <Chips
+            orderBy={orderBy}
+            onOrderByChange={handleOrderByChange}
+            isDisabled={!hasItems}
+          />
         </div>
       }
       className='relative'
