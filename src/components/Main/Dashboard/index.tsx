@@ -69,7 +69,7 @@ const Dashboard = () => {
       return (
         <div className='bg-app-background flex h-full w-full items-center justify-center'>
           <p className='text-slate-500'>
-            No search results found for {searchPhrase}.
+            No search results found for {searchPhrase}
           </p>
         </div>
       )
