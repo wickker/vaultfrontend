@@ -94,7 +94,7 @@ const Dashboard = () => {
           <Chips
             orderBy={orderBy}
             onOrderByChange={handleOrderByChange}
-            isDisabled={!hasItems}
+            isDisabled={getItems.isFetching}
           />
         </div>
       }
