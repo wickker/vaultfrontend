@@ -40,7 +40,6 @@ const Chips = ({
         onChange={onCategoryChange}
         isDisabled={isDisabled}
         options={categoryOptions}
-        isActive={false}
       >
         {categoryFilterLabel}
         <FaChevronDown />
@@ -51,7 +50,6 @@ const Chips = ({
         options={orderByOptions}
         onChange={onOrderByChange}
         isDisabled={isDisabled}
-        isActive={false}
       >
         Sort
         <LuArrowDownUp className='h-4 w-4' />

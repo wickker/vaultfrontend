@@ -4,7 +4,7 @@ import { SelectOption } from '@/components/commons/Select'
 
 type FilterChipProps<T = string> = {
   isDisabled?: boolean
-  isActive?: boolean
+  isPrimary?: boolean
   options: Array<SelectOption<T>>
   value: T
   onChange: (v: T) => void
@@ -12,7 +12,7 @@ type FilterChipProps<T = string> = {
 
 const FilterChip = <T,>({
   isDisabled = false,
-  isActive = true,
+  isPrimary = false,
   options = [],
   value,
   onChange,
@@ -34,7 +34,7 @@ const FilterChip = <T,>({
     <>
       <Chip
         disabled={isDisabled}
-        isActive={isActive}
+        isPrimary={isPrimary}
         onClick={handleOpenSelect}
       >
         {children}
