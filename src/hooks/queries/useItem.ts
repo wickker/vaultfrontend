@@ -45,15 +45,11 @@ const useItem = () => {
   const useUpdateItemMutation = (onSuccess: (d: Item) => void) =>
     useMutation({
       mutationFn: async (request: UpdateItemRequest): Promise<Item> => {
-        const res = await vaultApi.put(
-          `${path}/${request.id}`,
-          { name: request.name },
-          {
-            headers: {
-              Authorization: `Bearer ${await getToken()}`,
-            },
-          }
-        )
+        const res = await vaultApi.put(`${path}/${request.id}`, request, {
+          headers: {
+            Authorization: `Bearer ${await getToken()}`,
+          },
+        })
         return res.data
       },
       onSuccess,

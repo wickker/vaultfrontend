@@ -1,33 +1,75 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { RiLoader4Line } from 'react-icons/ri'
 import { useLocation, useNavigate } from 'react-router'
 import Chips from './Chips'
 import { ItemModalProps } from './ItemModal'
 import ItemTile from './ItemTile'
+import { Category } from '@/@types/categories'
 import { AppLocation } from '@/@types/commons'
+import { Item } from '@/@types/items'
 import { Button, NoItemsYet, Page, SearchHeader } from '@/components/commons'
+import useCategory from '@/hooks/queries/useCategory'
 import useItem from '@/hooks/queries/useItem'
-import { GetItemsOrderBy, RelativeRoute } from '@/utils/constants/enums'
+import {
+  CategoryColor,
+  GetItemsOrderBy,
+  RelativeRoute,
+} from '@/utils/constants/enums'
 import { QUERY_KEYS } from '@/utils/constants/queryKeys'
 
 const Dashboard = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  // state
   const [searchPhrase, setSearchPhrase] = useState<string>()
   const [orderBy, setOrderBy] = useState<GetItemsOrderBy>(
     GetItemsOrderBy.NAME_ASC
   )
-  const [categoryId] = useState(0)
-  const { useGetItemsQuery } = useItem()
+  const [categoryId] = useState(0) // TODO:
+
+  // hooks
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  // query
   const request = {
     search_phrase: searchPhrase,
     order_by: orderBy,
+    categoryId: categoryId || undefined,
   }
   const queryKey = QUERY_KEYS.GET_ITEMS(request)
+  const { useGetItemsQuery } = useItem()
   const getItems = useGetItemsQuery(request)
-  const hasItems = getItems.isSuccess && getItems.data.length > 0
-  const selectedCategoryId = categoryId === 0 ? 1 : categoryId
+  const { useGetCategoriesQuery } = useCategory()
+  const getCategories = useGetCategoriesQuery()
+  const hasItems =
+    getItems.isSuccess && getCategories.isSuccess && getItems.data.length > 0
+  const categories: Array<Category> = [
+    {
+      id: 1,
+      name: 'Default',
+      color: CategoryColor.YELLOW,
+    },
+    ...(getCategories.data || []),
+  ]
+  const categoryInitialsMap = categories.reduce<Record<number, Category>>(
+    (res, c) => {
+      res[c.id] = {
+        ...c,
+        name: getInitials(c.name),
+      }
+      return res
+    },
+    {}
+  )
+
+  function getInitials(text: string) {
+    const str = text.trim().split(' ')
+    if (str.length === 0) return ''
+    if (str.length >= 2) {
+      return `${str[0].charAt(0)}${str[1].charAt(0)}`.toUpperCase()
+    }
+    return str[0].charAt(0).toUpperCase()
+  }
 
   const handleSearchChange = (s: string) => {
     const trimmed = s.trim()
@@ -43,30 +85,25 @@ const Dashboard = () => {
       state: {
         props: {
           queryKey,
-          categoryId: selectedCategoryId,
+          dashboardCategoryId: categoryId === 0 ? 1 : categoryId,
+          categories,
         },
+        previousLocation: location,
+      } satisfies AppLocation<ItemModalProps>,
+    })
+
+  const handleEditItem = (item: Item) =>
+    navigate(RelativeRoute.MODAL, {
+      state: {
+        props: { item, queryKey, dashboardCategoryId: 0, categories },
         previousLocation: location,
       } satisfies AppLocation<ItemModalProps>,
     })
 
   const handleOrderByChange = (v: GetItemsOrderBy) => setOrderBy(v)
 
-  const items = useMemo(
-    () =>
-      (getItems.data || []).map((item) => (
-        <ItemTile
-          item={item}
-          key={item.id}
-          queryKey={queryKey}
-          categoryId={selectedCategoryId}
-        />
-      )),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [getItems.data]
-  )
-
   const renderItems = () => {
-    if (getItems.isFetching)
+    if (getItems.isFetching || getCategories.isFetching)
       return (
         <div className='bg-app-background flex h-full w-full items-center justify-center'>
           <RiLoader4Line className='h-10 w-10 animate-spin text-slate-400' />
@@ -86,7 +123,15 @@ const Dashboard = () => {
 
     return (
       <div className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pb-22'>
-        {items}
+        {(getItems.data || []).map((item) => (
+          <ItemTile
+            key={item.id}
+            item={item}
+            onEdit={() => handleEditItem(item)}
+            categoryInitials={categoryInitialsMap[item.category_id].name}
+            categoryColor={categoryInitialsMap[item.category_id].color}
+          />
+        ))}
       </div>
     )
   }

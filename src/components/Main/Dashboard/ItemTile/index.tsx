@@ -1,31 +1,28 @@
 import { MouseEvent } from 'react'
 import { DateTime } from 'luxon'
 import { FiEdit } from 'react-icons/fi'
-import { useLocation, useNavigate } from 'react-router'
-import { AppLocation } from '@/@types/commons'
-import { GetItemsRequest, Item } from '@/@types/items'
-import { ItemModalProps } from '@/components/Main/Dashboard/ItemModal'
-import { RelativeRoute, Route } from '@/utils/constants/enums'
-import { getRandomPastelColor } from '@/utils/functions/commons'
+import { useNavigate } from 'react-router'
+import { Item } from '@/@types/items'
+import { CategoryColor, Route } from '@/utils/constants/enums'
 
 type ItemTileProps = {
   item: Item
-  queryKey: readonly ['items', GetItemsRequest]
-  categoryId: number
+  categoryInitials: string
+  categoryColor: string
+  onEdit: () => void
 }
 
-const ItemTile = ({ item, queryKey, categoryId }: ItemTileProps) => {
+const ItemTile = ({
+  item,
+  categoryColor = CategoryColor.YELLOW,
+  categoryInitials,
+  onEdit,
+}: ItemTileProps) => {
   const navigate = useNavigate()
-  const location = useLocation()
 
   const handleEdit = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    navigate(RelativeRoute.MODAL, {
-      state: {
-        props: { item, queryKey, categoryId },
-        previousLocation: location,
-      } satisfies AppLocation<ItemModalProps>,
-    })
+    onEdit()
   }
 
   const handleClickTile = () =>
@@ -37,11 +34,13 @@ const ItemTile = ({ item, queryKey, categoryId }: ItemTileProps) => {
       onClick={handleClickTile}
     >
       <div
-        className='h-12 w-12 rounded-full'
+        className='flex h-12 w-12 items-center justify-center rounded-full text-xl text-white'
         style={{
-          backgroundColor: getRandomPastelColor(),
+          backgroundColor: categoryColor,
         }}
-      />
+      >
+        {categoryInitials}
+      </div>
 
       <div className='flex w-0 min-w-full flex-col gap-y-0.5'>
         <p className='text-app-default truncate font-semibold'>{item.name}</p>

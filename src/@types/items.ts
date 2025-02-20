@@ -16,6 +16,7 @@ export const UpdateItemRequestSchema = z
 export const GetItemsRequestSchema = z.object({
   search_phrase: z.string().optional(),
   order_by: z.nativeEnum(GetItemsOrderBy),
+  category_id: z.number().optional(),
 })
 
 // Responses

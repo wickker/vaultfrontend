@@ -5,6 +5,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { BsTrash } from 'react-icons/bs'
 import { RxCross2 } from 'react-icons/rx'
 import { Location, useLocation, useNavigate } from 'react-router'
+import { Category } from '@/@types/categories'
 import { AppLocation } from '@/@types/commons'
 import { GetItemsRequest, Item, ItemFormSchema } from '@/@types/items'
 import {
@@ -15,13 +16,13 @@ import {
   Select,
   ModalFooter,
 } from '@/components/commons'
-import useCategory from '@/hooks/queries/useCategory'
 import useItem from '@/hooks/queries/useItem'
 
 export type ItemModalProps = {
   queryKey: readonly ['items', GetItemsRequest]
   item?: Item
-  categoryId: number
+  dashboardCategoryId: number
+  categories: Array<Category>
 }
 
 const ItemModal = () => {
@@ -30,12 +31,13 @@ const ItemModal = () => {
 
   // props
   const location: Location<AppLocation<ItemModalProps>> = useLocation()
-  const { item, queryKey, categoryId } = location.state.props
+  const { item, queryKey, dashboardCategoryId, categories } =
+    location.state.props
 
   // form
   const defaultValues = item
     ? { name: item.name, category_id: item.category_id }
-    : { name: '', category_id: categoryId }
+    : { name: '', category_id: dashboardCategoryId }
   const {
     register,
     handleSubmit,
@@ -61,15 +63,7 @@ const ItemModal = () => {
   const createItem = useCreateItemMutation(createItemSuccessCb)
   const updateItem = useUpdateItemMutation(updateItemSuccessCb)
   const deleteItem = useDeleteItemMutation(deleteItemSuccessCb)
-  const { useGetCategoriesQuery } = useCategory()
-  const getCategories = useGetCategoriesQuery()
-  const categoryOptions = [
-    { text: 'Default', value: 1 },
-    ...(getCategories.data || []).map((c) => ({
-      text: c.name,
-      value: c.id,
-    })),
-  ]
+  const categoryOptions = categories.map((c) => ({ text: c.name, value: c.id }))
 
   function deleteItemSuccessCb() {
     queryClient.setQueryData(queryKey, (items: Array<Item>) =>
