@@ -27,16 +27,13 @@ import ToastProvider from './contexts/useToastContext'
 import { useToastContext } from './contexts/useToastContext/context'
 import { Route as AppRoute, RelativeRoute } from './utils/constants/enums'
 
-const ClerkAndRoutes = () => {
+const AppRoutes = () => {
   const location: Location<AppLocation> = useLocation()
   const previousLocation = location.state?.previousLocation
   const { DASHBOARD, ITEMS, PROFILE, CATEGORIES } = AppRoute
 
   return (
-    <ClerkProvider
-      publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}
-      afterSignOutUrl={DASHBOARD}
-    >
+    <>
       <Routes location={previousLocation || location}>
         <Route path={DASHBOARD} element={<Main />} />
         <Route path='*' element={<Fallback />} />
@@ -86,7 +83,7 @@ const ClerkAndRoutes = () => {
           />
         </Routes>
       )}
-    </ClerkProvider>
+    </>
   )
 }
 
@@ -116,7 +113,12 @@ const App = () => {
       <ToastProvider>
         <QueryClientProvider client={client}>
           <BrowserRouter>
-            <ClerkAndRoutes />
+            <ClerkProvider
+              publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}
+              afterSignOutUrl={AppRoute.DASHBOARD}
+            >
+              <AppRoutes />
+            </ClerkProvider>
           </BrowserRouter>
         </QueryClientProvider>
         <Toast />

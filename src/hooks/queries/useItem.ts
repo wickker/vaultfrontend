@@ -1,70 +1,34 @@
-import { useAuth } from '@clerk/clerk-react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import {
-  CreateItemRequest,
-  GetItemsRequest,
-  Item,
-  UpdateItemRequest,
-} from '@/@types/items'
-import { vaultApi } from '@/services'
+import { GetItemsRequest, Item } from '@/@types/items'
+import useAxiosConfig from '@/hooks/useAxiosConfig'
+import vaultApi from '@/services'
 import { QUERY_KEYS } from '@/utils/constants/queryKeys'
 
-const path = '/items'
-
 const useItem = () => {
-  const { getToken } = useAuth()
+  const { initConfig } = useAxiosConfig()
 
-  const useGetItemsQuery = (request: GetItemsRequest) =>
+  const useGetItemsQuery = (params: GetItemsRequest) =>
     useQuery({
-      queryKey: QUERY_KEYS.GET_ITEMS(request),
-      queryFn: async (): Promise<Array<Item>> => {
-        const res = await vaultApi.get(path, {
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-          params: request,
-        })
-        return res.data
-      },
+      queryKey: QUERY_KEYS.GET_ITEMS(params),
+      queryFn: vaultApi.getItems(initConfig(params)),
       retry: false,
     })
 
   const useCreateItemMutation = (onSuccess: () => void) =>
     useMutation({
-      mutationFn: async (request: CreateItemRequest): Promise<Item> => {
-        const res = await vaultApi.post(path, request, {
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        })
-        return res.data
-      },
+      mutationFn: vaultApi.createItem(initConfig()),
       onSuccess,
     })
 
   const useUpdateItemMutation = (onSuccess: (d: Item) => void) =>
     useMutation({
-      mutationFn: async (request: UpdateItemRequest): Promise<Item> => {
-        const res = await vaultApi.put(`${path}/${request.id}`, request, {
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        })
-        return res.data
-      },
+      mutationFn: vaultApi.updateItem(initConfig()),
       onSuccess,
     })
 
   const useDeleteItemMutation = (onSuccess: () => void) =>
     useMutation({
-      mutationFn: async (id: number): Promise<null> => {
-        const res = await vaultApi.delete(`${path}/${id}`, {
-          headers: {
-            Authorization: `Bearer ${await getToken()}`,
-          },
-        })
-        return res.data
-      },
+      mutationFn: vaultApi.deleteItem(initConfig()),
       onSuccess,
     })
 
