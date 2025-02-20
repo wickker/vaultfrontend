@@ -15,7 +15,7 @@ const routes = [
   },
 ]
 
-const Footer = () => {
+const FooterNavigation = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -41,4 +41,4 @@ const Footer = () => {
   )
 }
 
-export default Footer
+export default FooterNavigation
