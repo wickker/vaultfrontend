@@ -24,7 +24,7 @@ const Dashboard = () => {
   const [orderBy, setOrderBy] = useState<GetItemsOrderBy>(
     GetItemsOrderBy.NAME_ASC
   )
-  const [categoryId] = useState(0) // TODO:
+  const [categoryId, setCategoryId] = useState(0) // TODO:
 
   // hooks
   const navigate = useNavigate()
@@ -34,7 +34,7 @@ const Dashboard = () => {
   const request = {
     search_phrase: searchPhrase,
     order_by: orderBy,
-    categoryId: categoryId || undefined,
+    category_id: categoryId || undefined,
   }
   const queryKey = QUERY_KEYS.GET_ITEMS(request)
   const { useGetItemsQuery } = useItem()
@@ -103,6 +103,8 @@ const Dashboard = () => {
 
   const handleOrderByChange = (v: GetItemsOrderBy) => setOrderBy(v)
 
+  const handleCategoryChange = (v: number) => setCategoryId(v)
+
   const renderItems = () => {
     if (isLoading)
       return (
@@ -149,6 +151,9 @@ const Dashboard = () => {
             orderBy={orderBy}
             onOrderByChange={handleOrderByChange}
             isDisabled={isLoading}
+            categoryId={categoryId}
+            onCategoryChange={handleCategoryChange}
+            categories={categories}
           />
         </div>
       }

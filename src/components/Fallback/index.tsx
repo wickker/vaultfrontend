@@ -11,7 +11,7 @@ const Fallback = () => {
 
   return (
     <Page hideFooter>
-      <div className='flex flex-col items-center justify-center gap-y-6'>
+      <div className='flex flex-col items-center justify-center gap-y-6 p-6'>
         <TbMoodSadDizzy className='h-30 w-30 text-slate-500' />
 
         <h1 className='text-app-default text-2xl'>Page not found</h1>
