@@ -41,6 +41,7 @@ const Dashboard = () => {
   const getItems = useGetItemsQuery(request)
   const { useGetCategoriesQuery } = useCategory()
   const getCategories = useGetCategoriesQuery()
+  const isLoading = getItems.isFetching || getCategories.isFetching
   const hasItems =
     getItems.isSuccess && getCategories.isSuccess && getItems.data.length > 0
   const categories: Array<Category> = [
@@ -65,10 +66,10 @@ const Dashboard = () => {
   function getInitials(text: string) {
     const str = text.trim().split(' ')
     if (str.length === 0) return ''
-    if (str.length >= 2) {
-      return `${str[0].charAt(0)}${str[1].charAt(0)}`.toUpperCase()
+    if (str.length === 1) {
+      return str[0].charAt(0).toUpperCase()
     }
-    return str[0].charAt(0).toUpperCase()
+    return `${str[0].charAt(0)}${str[1].charAt(0)}`.toUpperCase()
   }
 
   const handleSearchChange = (s: string) => {
@@ -103,7 +104,7 @@ const Dashboard = () => {
   const handleOrderByChange = (v: GetItemsOrderBy) => setOrderBy(v)
 
   const renderItems = () => {
-    if (getItems.isFetching || getCategories.isFetching)
+    if (isLoading)
       return (
         <div className='bg-app-background flex h-full w-full items-center justify-center'>
           <RiLoader4Line className='h-10 w-10 animate-spin text-slate-400' />
@@ -142,12 +143,12 @@ const Dashboard = () => {
         <div className='bg-app-background pb-5'>
           <SearchHeader
             onSearchChange={handleSearchChange}
-            isSearchDisabled={getItems.isFetching}
+            isSearchDisabled={isLoading}
           />
           <Chips
             orderBy={orderBy}
             onOrderByChange={handleOrderByChange}
-            isDisabled={getItems.isFetching}
+            isDisabled={isLoading}
           />
         </div>
       }
@@ -160,7 +161,7 @@ const Dashboard = () => {
           icon={<FaPlus className='h-5 w-5' />}
           className='rounded-full p-2'
           onClick={handleAddItem}
-          disabled={getItems.isFetching}
+          disabled={isLoading}
         />
       </div>
     </Page>
