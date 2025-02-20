@@ -1,4 +1,4 @@
-export { default as AuthGuard } from './AuthGuard'
+export { default as AuthRequired } from './AuthRequired'
 export { default as Avatar } from './Avatar'
 export { default as Button } from './Button'
 export { default as Chip } from './Chip'

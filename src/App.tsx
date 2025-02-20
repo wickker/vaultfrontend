@@ -15,7 +15,7 @@ import {
 import { registerSW } from 'virtual:pwa-register'
 import { AppLocation } from './@types/commons'
 import Categories from './components/Categories'
-import { AuthGuard, Toast } from './components/commons'
+import { AuthRequired, Toast } from './components/commons'
 import Fallback from './components/Fallback'
 import Item from './components/Item'
 import RecordModal from './components/Item/RecordModal'
@@ -37,50 +37,26 @@ const AppRoutes = () => {
       <Routes location={previousLocation || location}>
         <Route path={DASHBOARD} element={<Main />} />
         <Route path='*' element={<Fallback />} />
-        <Route
-          path={`${ITEMS}/:id`}
-          element={
-            <AuthGuard>
-              <Item />
-            </AuthGuard>
-          }
-        />
-        <Route
-          path={PROFILE}
-          element={
-            <AuthGuard>
-              <Profile />
-            </AuthGuard>
-          }
-        />
-        <Route
-          path={CATEGORIES}
-          element={
-            <AuthGuard>
-              <Categories />
-            </AuthGuard>
-          }
-        />
+
+        <Route element={<AuthRequired />}>
+          <Route path={`${ITEMS}/:id`} element={<Item />} />
+          <Route path={PROFILE} element={<Profile />} />
+          <Route path={CATEGORIES} element={<Categories />} />
+        </Route>
       </Routes>
 
       {previousLocation && (
         <Routes>
-          <Route
-            path={`${DASHBOARD}${RelativeRoute.MODAL}`}
-            element={
-              <AuthGuard>
-                <ItemModal />
-              </AuthGuard>
-            }
-          />
-          <Route
-            path={`${ITEMS}/:id/${RelativeRoute.MODAL}`}
-            element={
-              <AuthGuard>
-                <RecordModal />
-              </AuthGuard>
-            }
-          />
+          <Route element={<AuthRequired />}>
+            <Route
+              path={`${DASHBOARD}${RelativeRoute.MODAL}`}
+              element={<ItemModal />}
+            />
+            <Route
+              path={`${ITEMS}/:id/${RelativeRoute.MODAL}`}
+              element={<RecordModal />}
+            />
+          </Route>
         </Routes>
       )}
     </>
