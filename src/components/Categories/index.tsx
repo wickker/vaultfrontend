@@ -65,12 +65,14 @@ const Categories = () => {
               {c.name}
             </p>
 
-            <button
-              onClick={() => handleEditCategory(c)}
-              className='hover:cursor-pointer'
-            >
-              <FiEdit className='h-6 w-6 text-slate-500' />
-            </button>
+            {c.id !== 1 && (
+              <button
+                onClick={() => handleEditCategory(c)}
+                className='hover:cursor-pointer'
+              >
+                <FiEdit className='h-6 w-6 text-slate-500' />
+              </button>
+            )}
           </div>
         ))}
       </div>
