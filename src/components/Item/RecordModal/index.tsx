@@ -17,8 +17,8 @@ import {
   Modal,
   ModalConfirmDelete,
   Select,
+  ModalFooter,
 } from '@/components/commons'
-import ModalFooter from '@/components/commons/ModalFooter'
 import GeneratePassword from '@/components/Item/GeneratePassword'
 import useRecord from '@/hooks/queries/useRecord'
 import { RecordType } from '@/utils/constants/enums'

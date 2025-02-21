@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react'
-import Footer from '@/components/commons/Footer'
+import { FooterNavigation } from '@/components/commons'
 import { mc } from '@/utils/functions/commons'
 
 type PageProps = {
@@ -24,7 +24,7 @@ const Page = ({
       >
         {header}
         {children}
-        {hideFooter ? <div /> : <Footer />}
+        {hideFooter ? <div /> : <FooterNavigation />}
       </div>
     </div>
   )

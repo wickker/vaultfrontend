@@ -1,5 +1,5 @@
+import { BiHomeAlt } from 'react-icons/bi'
 import { FaRegUser } from 'react-icons/fa'
-import { LuLayoutDashboard } from 'react-icons/lu'
 import { useLocation, useNavigate } from 'react-router'
 import { Route } from '@/utils/constants/enums'
 import { mc } from '@/utils/functions/commons'
@@ -7,7 +7,7 @@ import { mc } from '@/utils/functions/commons'
 const routes = [
   {
     path: Route.DASHBOARD,
-    icon: <LuLayoutDashboard className='h-5 w-5' />,
+    icon: <BiHomeAlt className='h-6 w-6' />,
   },
   {
     path: Route.PROFILE,
@@ -15,7 +15,7 @@ const routes = [
   },
 ]
 
-const Footer = () => {
+const FooterNavigation = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -41,4 +41,4 @@ const Footer = () => {
   )
 }
 
-export default Footer
+export default FooterNavigation

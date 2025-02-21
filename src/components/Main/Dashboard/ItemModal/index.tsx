@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { BsTrash } from 'react-icons/bs'
 import { RxCross2 } from 'react-icons/rx'
 import { Location, useLocation, useNavigate } from 'react-router'
+import { Category } from '@/@types/categories'
 import { AppLocation } from '@/@types/commons'
 import { GetItemsRequest, Item, ItemFormSchema } from '@/@types/items'
 import {
@@ -12,13 +13,17 @@ import {
   Input,
   Modal,
   ModalConfirmDelete,
+  Select,
+  ModalFooter,
 } from '@/components/commons'
-import ModalFooter from '@/components/commons/ModalFooter'
+import CategoryTile from '@/components/Main/Dashboard/CategoryTile'
 import useItem from '@/hooks/queries/useItem'
 
 export type ItemModalProps = {
   queryKey: readonly ['items', GetItemsRequest]
   item?: Item
+  dashboardCategoryId: number
+  categories: Array<Category>
 }
 
 const ItemModal = () => {
@@ -27,17 +32,19 @@ const ItemModal = () => {
 
   // props
   const location: Location<AppLocation<ItemModalProps>> = useLocation()
-  const { item, queryKey } = location.state.props
+  const { item, queryKey, dashboardCategoryId, categories } =
+    location.state.props
 
   // form
-  const defaultValues = {
-    name: item ? item.name : '',
-  }
+  const defaultValues = item
+    ? { name: item.name, category_id: item.category_id }
+    : { name: '', category_id: dashboardCategoryId }
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm({
     resolver: zodResolver(ItemFormSchema),
     values: defaultValues,
@@ -57,6 +64,10 @@ const ItemModal = () => {
   const createItem = useCreateItemMutation(createItemSuccessCb)
   const updateItem = useUpdateItemMutation(updateItemSuccessCb)
   const deleteItem = useDeleteItemMutation(deleteItemSuccessCb)
+  const categoryOptions = categories.map((c) => ({
+    text: <CategoryTile name={c.name} color={c.color} />,
+    value: c.id,
+  }))
 
   function deleteItemSuccessCb() {
     queryClient.setQueryData(queryKey, (items: Array<Item>) =>
@@ -73,19 +84,22 @@ const ItemModal = () => {
 
   function updateItemSuccessCb(d: Item) {
     queryClient.setQueryData(queryKey, (items: Array<Item>) =>
-      items.map((i) => (i.id === d.id ? { ...i, name: d.name } : i))
+      items.map((i) =>
+        i.id === d.id ? { ...i, name: d.name, category_id: d.category_id } : i
+      )
     )
     handleCancel()
   }
 
   const handleSave = handleSubmit((d) => {
     if (!item) {
-      createItem.mutate(d.name)
+      createItem.mutate(d)
       return
     }
     updateItem.mutate({
       id: item.id,
       name: d.name,
+      category_id: d.category_id,
     })
   })
 
@@ -137,6 +151,20 @@ const ItemModal = () => {
                   ref(e)
                   firstInputRef.current = e
                 }}
+              />
+            </FormItem>
+
+            <FormItem label='Category' error={errors.name?.message}>
+              <Controller
+                control={control}
+                name='category_id'
+                render={({ field: { onChange, value } }) => (
+                  <Select
+                    options={categoryOptions}
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}
               />
             </FormItem>
           </form>

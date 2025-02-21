@@ -5,6 +5,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import {
   BrowserRouter,
   Routes,
@@ -13,8 +14,10 @@ import {
   Location,
 } from 'react-router'
 import { registerSW } from 'virtual:pwa-register'
-import { AppLocation } from './@types/commons'
-import { AuthGuard, Toast } from './components/commons'
+import { AppError, AppLocation } from './@types/commons'
+import Categories from './components/Categories'
+import CategoryModal from './components/Categories/CatgeoryModal'
+import { AuthRequired, Toast } from './components/commons'
 import Fallback from './components/Fallback'
 import Item from './components/Item'
 import RecordModal from './components/Item/RecordModal'
@@ -22,62 +25,46 @@ import Main from './components/Main'
 import ItemModal from './components/Main/Dashboard/ItemModal'
 import Profile from './components/Profile'
 import Config from './configs'
-import ToastProvider from './contexts/useToastContext'
 import { useToastContext } from './contexts/useToastContext/context'
 import { Route as AppRoute, RelativeRoute } from './utils/constants/enums'
 
-const ClerkAndRoutes = () => {
+const AppRoutes = () => {
   const location: Location<AppLocation> = useLocation()
   const previousLocation = location.state?.previousLocation
-  const { DASHBOARD, ITEMS, PROFILE } = AppRoute
+  const { DASHBOARD, ITEMS, PROFILE, CATEGORIES } = AppRoute
 
   return (
-    <ClerkProvider
-      publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}
-      afterSignOutUrl={DASHBOARD}
-    >
+    <>
       <Routes location={previousLocation || location}>
         <Route path={DASHBOARD} element={<Main />} />
         <Route path='*' element={<Fallback />} />
-        <Route
-          path={`${ITEMS}/:id`}
-          element={
-            <AuthGuard>
-              <Item />
-            </AuthGuard>
-          }
-        />
-        <Route
-          path={PROFILE}
-          element={
-            <AuthGuard>
-              <Profile />
-            </AuthGuard>
-          }
-        />
+
+        <Route element={<AuthRequired />}>
+          <Route path={`${ITEMS}/:id`} element={<Item />} />
+          <Route path={PROFILE} element={<Profile />} />
+          <Route path={CATEGORIES} element={<Categories />} />
+        </Route>
       </Routes>
 
       {previousLocation && (
         <Routes>
-          <Route
-            path={`${DASHBOARD}${RelativeRoute.MODAL}`}
-            element={
-              <AuthGuard>
-                <ItemModal />
-              </AuthGuard>
-            }
-          />
-          <Route
-            path={`${ITEMS}/:id/${RelativeRoute.MODAL}`}
-            element={
-              <AuthGuard>
-                <RecordModal />
-              </AuthGuard>
-            }
-          />
+          <Route element={<AuthRequired />}>
+            <Route
+              path={`${DASHBOARD}${RelativeRoute.MODAL}`}
+              element={<ItemModal />}
+            />
+            <Route
+              path={`${ITEMS}/:id/${RelativeRoute.MODAL}`}
+              element={<RecordModal />}
+            />
+            <Route
+              path={`${CATEGORIES}/${RelativeRoute.MODAL}`}
+              element={<CategoryModal />}
+            />
+          </Route>
         </Routes>
       )}
-    </ClerkProvider>
+    </>
   )
 }
 
@@ -85,8 +72,13 @@ const App = () => {
   registerSW({ immediate: true })
   const { toast } = useToastContext()
 
-  const handleError = (err: Error) =>
+  const handleError = (err: AxiosError<AppError> | Error) => {
+    if ('response' in err) {
+      toast.error(err.response?.data?.message || JSON.stringify(err))
+      return
+    }
     toast.error(err.message || JSON.stringify(err))
+  }
 
   const client = new QueryClient({
     defaultOptions: {
@@ -104,14 +96,18 @@ const App = () => {
 
   return (
     <div className='font-noto-sans'>
-      <ToastProvider>
-        <QueryClientProvider client={client}>
-          <BrowserRouter>
-            <ClerkAndRoutes />
-          </BrowserRouter>
-        </QueryClientProvider>
-        <Toast />
-      </ToastProvider>
+      <QueryClientProvider client={client}>
+        <BrowserRouter>
+          <ClerkProvider
+            publishableKey={Config.VITE_CLERK_PUBLISHABLE_KEY}
+            afterSignOutUrl={AppRoute.DASHBOARD}
+          >
+            <AppRoutes />
+          </ClerkProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
+
+      <Toast />
     </div>
   )
 }

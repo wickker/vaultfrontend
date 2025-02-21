@@ -1,4 +1,5 @@
 export const Route = {
+  CATEGORIES: '/categories',
   DASHBOARD: '/',
   ITEMS: '/items',
   PROFILE: '/profile',
@@ -34,3 +35,16 @@ export const GetItemsOrderBy = {
 
 export type GetItemsOrderBy =
   (typeof GetItemsOrderBy)[keyof typeof GetItemsOrderBy]
+
+export const CategoryColor = {
+  PURPLE: '#584566',
+  RED: '#BF5268',
+  ORANGE: '#F3915A',
+  YELLOW: '#F4C578',
+  LIME: '#86A874',
+  GREEN: '#54856B',
+  AQUA: '#446870',
+  INDIGO: '#4E5470',
+} as const
+
+export type CategoryColor = (typeof CategoryColor)[keyof typeof CategoryColor]

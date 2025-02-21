@@ -1,18 +1,18 @@
 import { MouseEvent, PropsWithChildren, useState } from 'react'
-import { Chip, FilterOptions, Menu } from '@/components/commons'
-import { SelectOption } from '@/components/commons/Select'
+import { OptionItem } from '@/@types/commons'
+import { Chip, Options, Menu } from '@/components/commons'
 
 type FilterChipProps<T = string> = {
   isDisabled?: boolean
-  isActive?: boolean
-  options: Array<SelectOption<T>>
+  isPrimary?: boolean
+  options: Array<OptionItem<T>>
   value: T
   onChange: (v: T) => void
 } & PropsWithChildren
 
 const FilterChip = <T,>({
   isDisabled = false,
-  isActive = true,
+  isPrimary = false,
   options = [],
   value,
   onChange,
@@ -34,18 +34,14 @@ const FilterChip = <T,>({
     <>
       <Chip
         disabled={isDisabled}
-        isActive={isActive}
+        isPrimary={isPrimary}
         onClick={handleOpenSelect}
       >
         {children}
       </Chip>
 
       <Menu isVisible={isVisible} onClose={() => setIsVisible(false)}>
-        <FilterOptions
-          options={options}
-          value={value}
-          onSelect={handleSelect}
-        />
+        <Options options={options} value={value} onSelect={handleSelect} />
       </Menu>
     </>
   )
