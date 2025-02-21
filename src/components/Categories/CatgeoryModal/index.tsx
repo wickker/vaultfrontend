@@ -117,7 +117,7 @@ const CategoryModal = () => {
           <ModalFooter
             onCancel={handleCancel}
             onSave={handleSave}
-            isSaveLoading={createCategory.isPending}
+            isSaveLoading={createCategory.isPending || updateCategory.isPending}
           />
         }
         header={
