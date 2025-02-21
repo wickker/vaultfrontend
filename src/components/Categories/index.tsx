@@ -2,14 +2,17 @@ import { FaPlus } from 'react-icons/fa6'
 import { FiEdit } from 'react-icons/fi'
 import { IoChevronBack } from 'react-icons/io5'
 import { RiLoader4Line } from 'react-icons/ri'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
+import { CategoryModalProps } from './CatgeoryModal'
+import { AppLocation } from '@/@types/commons'
 import { Button, Page } from '@/components/commons'
 import { ButtonVariant } from '@/components/commons/Button/types'
 import useCategory from '@/hooks/queries/useCategory'
-import { CategoryColor, Route } from '@/utils/constants/enums'
+import { CategoryColor, RelativeRoute, Route } from '@/utils/constants/enums'
 
 const Categories = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const { useGetCategoriesQuery } = useCategory()
   const getCategories = useGetCategoriesQuery()
   const categories = [
@@ -18,6 +21,14 @@ const Categories = () => {
   ]
 
   const handleGoBack = () => navigate(Route.PROFILE)
+
+  const handleAddCategory = () =>
+    navigate(RelativeRoute.MODAL, {
+      state: {
+        props: {},
+        previousLocation: location,
+      } satisfies AppLocation<CategoryModalProps>,
+    })
 
   const renderCategories = () => {
     if (getCategories.isFetching)
@@ -76,7 +87,7 @@ const Categories = () => {
         <Button
           icon={<FaPlus className='h-5 w-5' />}
           className='rounded-full p-2'
-          //   onClick={handleAddRecord}
+          onClick={handleAddCategory}
           disabled={getCategories.isFetching}
         />
       </div>

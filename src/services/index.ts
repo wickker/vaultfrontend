@@ -1,5 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { Category } from '@/@types/categories'
+import {
+  Category,
+  CreateCategoryRequest,
+  UpdateCategoryRequest,
+} from '@/@types/categories'
 import { CreateItemRequest, Item, UpdateItemRequest } from '@/@types/items'
 import {
   CreateRecordRequest,
@@ -31,6 +35,11 @@ const getRecordsByItem =
     vaultApi.get('/records', await config).then((res) => res.data)
 
 // POST
+const createCategory =
+  (config: Promise<AxiosRequestConfig>) =>
+  async (request: CreateCategoryRequest): Promise<Category> =>
+    vaultApi.post('/categories', request, await config).then((res) => res.data)
+
 const createItem =
   (config: Promise<AxiosRequestConfig>) =>
   async (request: CreateItemRequest): Promise<Item> =>
@@ -42,6 +51,17 @@ const createRecord =
     vaultApi.post('/records', request, await config).then((res) => res.data)
 
 // PUT
+const updateCategory =
+  (config: Promise<AxiosRequestConfig>) =>
+  async (request: UpdateCategoryRequest): Promise<Category> =>
+    vaultApi
+      .put(
+        `/categories/${request.id}`,
+        { name: request.name, color: request.color },
+        await config
+      )
+      .then((res) => res.data)
+
 const updateItem =
   (config: Promise<AxiosRequestConfig>) =>
   async (request: UpdateItemRequest): Promise<Item> =>
@@ -65,6 +85,11 @@ const updateRecord =
       .then((res) => res.data)
 
 // DELETE
+const deleteCategory =
+  (config: Promise<AxiosRequestConfig>) =>
+  async (id: number): Promise<null> =>
+    vaultApi.delete(`/categories/${id}`, await config).then((res) => res.data)
+
 const deleteItem =
   (config: Promise<AxiosRequestConfig>) =>
   async (id: number): Promise<null> =>
@@ -76,13 +101,16 @@ const deleteRecord =
     vaultApi.delete(`/records/${id}`, await config).then((res) => res.data)
 
 export default {
+  createCategory,
   createItem,
   createRecord,
+  deleteCategory,
   deleteItem,
   deleteRecord,
   getCategories,
   getItems,
   getRecordsByItem,
+  updateCategory,
   updateItem,
   updateRecord,
 }

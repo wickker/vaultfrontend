@@ -15,6 +15,7 @@ import {
 import { registerSW } from 'virtual:pwa-register'
 import { AppLocation } from './@types/commons'
 import Categories from './components/Categories'
+import CategoryModal from './components/Categories/CatgeoryModal'
 import { AuthRequired, Toast } from './components/commons'
 import Fallback from './components/Fallback'
 import Item from './components/Item'
@@ -55,6 +56,10 @@ const AppRoutes = () => {
             <Route
               path={`${ITEMS}/:id/${RelativeRoute.MODAL}`}
               element={<RecordModal />}
+            />
+            <Route
+              path={`${CATEGORIES}/${RelativeRoute.MODAL}`}
+              element={<CategoryModal />}
             />
           </Route>
         </Routes>
