@@ -14,31 +14,27 @@ const Modal = ({
   footer = <div />,
   children,
 }: ModalProps) => {
-  return (
-    <>
-      {createPortal(
-        <AnimatePresence>
-          {isVisible && (
-            <motion.div
-              className='fixed inset-0 flex justify-center'
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-            >
-              <div className='font-noto-sans grid w-md max-w-md grid-rows-[auto_1fr_auto] overflow-hidden bg-white'>
-                {header}
+  return createPortal(
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          className='fixed inset-0 flex justify-center'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+        >
+          <div className='font-noto-sans grid w-md max-w-md grid-rows-[auto_1fr_auto] overflow-hidden bg-white'>
+            {header}
 
-                {children}
+            {children}
 
-                {footer}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>,
-        document.body
+            {footer}
+          </div>
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>,
+    document.body
   )
 }
 

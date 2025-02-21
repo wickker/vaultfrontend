@@ -4,6 +4,7 @@ import { IoChevronBack } from 'react-icons/io5'
 import { RiLoader4Line } from 'react-icons/ri'
 import { useLocation, useNavigate } from 'react-router'
 import { CategoryModalProps } from './CatgeoryModal'
+import { Category } from '@/@types/categories'
 import { AppLocation } from '@/@types/commons'
 import { Button, Page } from '@/components/commons'
 import { ButtonVariant } from '@/components/commons/Button/types'
@@ -26,6 +27,14 @@ const Categories = () => {
     navigate(RelativeRoute.MODAL, {
       state: {
         props: {},
+        previousLocation: location,
+      } satisfies AppLocation<CategoryModalProps>,
+    })
+
+  const handleEditCategory = (category: Category) =>
+    navigate(RelativeRoute.MODAL, {
+      state: {
+        props: { category },
         previousLocation: location,
       } satisfies AppLocation<CategoryModalProps>,
     })
@@ -56,7 +65,10 @@ const Categories = () => {
               {c.name}
             </p>
 
-            <button onClick={() => {}} className='hover:cursor-pointer'>
+            <button
+              onClick={() => handleEditCategory(c)}
+              className='hover:cursor-pointer'
+            >
               <FiEdit className='h-6 w-6 text-slate-500' />
             </button>
           </div>

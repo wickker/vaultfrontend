@@ -51,7 +51,7 @@ const Tile = ({ type = Toast.SUCCESS, message = '', onClose }: TileProps) => {
           <div className='text-app-default'>
             <div className='flex items-center justify-between'>
               <h1 className='text-xl'>{type}</h1>
-              <button onClick={onClose}>
+              <button onClick={onClose} className='hover:cursor-pointer'>
                 <RxCross2 className='h-7 w-7' />
               </button>
             </div>

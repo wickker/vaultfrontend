@@ -27,49 +27,45 @@ const Menu = ({
     onClose()
   }
 
-  return (
-    <>
-      {createPortal(
-        <AnimatePresence>
-          {isVisible && (
+  return createPortal(
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          className='fixed inset-0 flex justify-center'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+        >
+          <div className='font-noto-sans relative h-full w-md max-w-md bg-[rgba(0,0,0,0.7)]'>
             <motion.div
-              className='fixed inset-0 flex justify-center'
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
+              className={mc(
+                'absolute bottom-0 flex h-fit w-full flex-col rounded-t-lg bg-white opacity-100',
+                className
+              )}
+              initial={{ y: 100 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.25, ease: 'linear' }}
+              ref={clickOutsideRef}
             >
-              <div className='font-noto-sans relative h-full w-md max-w-md bg-[rgba(0,0,0,0.7)]'>
-                <motion.div
-                  className={mc(
-                    'absolute bottom-0 flex h-fit w-full flex-col rounded-t-lg bg-white opacity-100',
-                    className
-                  )}
-                  initial={{ y: 100 }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.25, ease: 'linear' }}
-                  ref={clickOutsideRef}
+              <div className='flex items-center justify-end px-6 pt-6'>
+                <button
+                  className='text-app-default hover:cursor-pointer'
+                  onClick={close}
                 >
-                  <div className='flex items-center justify-end px-6 pt-6'>
-                    <button
-                      className='text-app-default hover:cursor-pointer'
-                      onClick={close}
-                    >
-                      <RxCross2 className='h-8 w-8' />
-                    </button>
-                  </div>
-
-                  <div className='px-6 pb-6'>{children}</div>
-
-                  {footer}
-                </motion.div>
+                  <RxCross2 className='h-8 w-8' />
+                </button>
               </div>
+
+              <div className='px-6 pb-6'>{children}</div>
+
+              {footer}
             </motion.div>
-          )}
-        </AnimatePresence>,
-        document.body
+          </div>
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>,
+    document.body
   )
 }
 
