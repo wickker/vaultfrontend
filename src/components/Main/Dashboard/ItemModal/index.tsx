@@ -16,6 +16,7 @@ import {
   Select,
   ModalFooter,
 } from '@/components/commons'
+import CategoryTile from '@/components/Main/Dashboard/CategoryTile'
 import useItem from '@/hooks/queries/useItem'
 
 export type ItemModalProps = {
@@ -63,7 +64,10 @@ const ItemModal = () => {
   const createItem = useCreateItemMutation(createItemSuccessCb)
   const updateItem = useUpdateItemMutation(updateItemSuccessCb)
   const deleteItem = useDeleteItemMutation(deleteItemSuccessCb)
-  const categoryOptions = categories.map((c) => ({ text: c.name, value: c.id }))
+  const categoryOptions = categories.map((c) => ({
+    text: <CategoryTile name={c.name} color={c.color} />,
+    value: c.id,
+  }))
 
   function deleteItemSuccessCb() {
     queryClient.setQueryData(queryKey, (items: Array<Item>) =>

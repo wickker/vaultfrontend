@@ -8,3 +8,8 @@ export type AppLocation<T = undefined> = {
 export type AppError = {
   message: string
 }
+
+export type OptionItem<T = string> = {
+  text: JSX.Element | string
+  value: T
+}

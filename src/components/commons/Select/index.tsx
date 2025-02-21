@@ -1,14 +1,10 @@
 import { MouseEvent, useState } from 'react'
 import { FaChevronDown } from 'react-icons/fa6'
+import { OptionItem } from '@/@types/commons'
 import { Options, Menu } from '@/components/commons'
 
-export type SelectOption<T = string> = {
-  text: string
-  value: T
-}
-
 type SelectProps<T = string> = {
-  options: Array<SelectOption<T>>
+  options: Array<OptionItem<T>>
   value: T
   onChange: (v: T) => void
 }
@@ -43,7 +39,7 @@ const Select = <T,>({ options = [], value, onChange }: SelectProps<T>) => {
         className='text-app-default focus-visible-app bg-app-background grid w-full grid-cols-[1fr_auto] items-center gap-x-2 rounded-md p-2.5 text-left text-base hover:cursor-pointer'
         onClick={handleOpenSelect}
       >
-        <p className='truncate'>{getLabel()}</p>
+        <div className='truncate'>{getLabel()}</div>
         <FaChevronDown className='h-4 w-4 text-slate-500' />
       </button>
     </>

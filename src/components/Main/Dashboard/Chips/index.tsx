@@ -2,6 +2,7 @@ import { FaChevronDown } from 'react-icons/fa6'
 import { LuArrowDownUp } from 'react-icons/lu'
 import { Category } from '@/@types/categories'
 import { FilterChip } from '@/components/commons'
+import CategoryTile from '@/components/Main/Dashboard/CategoryTile'
 import { ORDER_BY_LABELS_MAP } from '@/utils/constants/commons'
 import { GetItemsOrderBy } from '@/utils/constants/enums'
 
@@ -24,7 +25,10 @@ const Chips = ({
 }: ChipsProps) => {
   const categoryOptions = [
     { text: 'All', value: 0 },
-    ...categories.map((c) => ({ text: c.name, value: c.id })),
+    ...categories.map((c) => ({
+      text: <CategoryTile name={c.name} color={c.color} />,
+      value: c.id,
+    })),
   ]
   const orderByOptions = Object.values(GetItemsOrderBy).map((o) => ({
     text: ORDER_BY_LABELS_MAP[o],

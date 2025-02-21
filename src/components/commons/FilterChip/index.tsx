@@ -1,11 +1,11 @@
 import { MouseEvent, PropsWithChildren, useState } from 'react'
+import { OptionItem } from '@/@types/commons'
 import { Chip, Options, Menu } from '@/components/commons'
-import { SelectOption } from '@/components/commons/Select'
 
 type FilterChipProps<T = string> = {
   isDisabled?: boolean
   isPrimary?: boolean
-  options: Array<SelectOption<T>>
+  options: Array<OptionItem<T>>
   value: T
   onChange: (v: T) => void
 } & PropsWithChildren
