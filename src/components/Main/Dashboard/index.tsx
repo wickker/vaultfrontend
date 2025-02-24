@@ -8,7 +8,13 @@ import ItemTile from './ItemTile'
 import { Category } from '@/@types/categories'
 import { AppLocation } from '@/@types/commons'
 import { Item } from '@/@types/items'
-import { Button, NoItemsYet, Page, SearchHeader } from '@/components/commons'
+import {
+  Button,
+  NoItemsYet,
+  Page,
+  SearchHeader,
+  SwipeX,
+} from '@/components/commons'
 import useCategory from '@/hooks/queries/useCategory'
 import useItem from '@/hooks/queries/useItem'
 import useScrollToBottom from '@/hooks/useScrollToBottom'
@@ -136,6 +142,8 @@ const Dashboard = () => {
         className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pb-22'
         onScroll={handleScrollToBottom}
       >
+        <SwipeX />
+
         {(getItems.data || []).map((item) => (
           <ItemTile
             key={item.id}

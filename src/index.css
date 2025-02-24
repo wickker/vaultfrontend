@@ -16,6 +16,15 @@
   }
 }
 
+.grid-stack {
+  display: grid;
+}
+
+.grid-stack > * {
+  grid-area: 1 / 1;
+  z-index: 0;
+}
+
 @theme {
   /* slate-100 */
   --color-app-background: #f1f5f9;
