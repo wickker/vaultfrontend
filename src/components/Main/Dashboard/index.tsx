@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { RiLoader4Line } from 'react-icons/ri'
 import { useLocation, useNavigate } from 'react-router'
@@ -11,12 +11,14 @@ import { Item } from '@/@types/items'
 import { Button, NoItemsYet, Page, SearchHeader } from '@/components/commons'
 import useCategory from '@/hooks/queries/useCategory'
 import useItem from '@/hooks/queries/useItem'
+import useScrollToBottom from '@/hooks/useScrollToBottom'
 import {
   CategoryColor,
   GetItemsOrderBy,
   RelativeRoute,
 } from '@/utils/constants/enums'
 import { QUERY_KEYS } from '@/utils/constants/queryKeys'
+import { mc } from '@/utils/functions/commons'
 
 const Dashboard = () => {
   // state
@@ -24,11 +26,12 @@ const Dashboard = () => {
   const [orderBy, setOrderBy] = useState<GetItemsOrderBy>(
     GetItemsOrderBy.NAME_ASC
   )
-  const [categoryId, setCategoryId] = useState(0) // TODO:
+  const [categoryId, setCategoryId] = useState(0)
 
   // hooks
   const navigate = useNavigate()
   const location = useLocation()
+  const { isBottom, handleScrollToBottom } = useScrollToBottom()
 
   // query
   const request = {
@@ -44,23 +47,27 @@ const Dashboard = () => {
   const isLoading = getItems.isFetching || getCategories.isFetching
   const hasItems =
     getItems.isSuccess && getCategories.isSuccess && getItems.data.length > 0
-  const categories: Array<Category> = [
-    {
-      id: 1,
-      name: 'Default',
-      color: CategoryColor.YELLOW,
-    },
-    ...(getCategories.data || []),
-  ]
-  const categoryInitialsMap = categories.reduce<Record<number, Category>>(
-    (res, c) => {
-      res[c.id] = {
-        ...c,
-        name: getInitials(c.name),
-      }
-      return res
-    },
-    {}
+  const categories: Array<Category> = useMemo(
+    () => [
+      {
+        id: 1,
+        name: 'Default',
+        color: CategoryColor.YELLOW,
+      },
+      ...(getCategories.data || []),
+    ],
+    [getCategories.data]
+  )
+  const categoryInitialsMap = useMemo(
+    () =>
+      categories.reduce<Record<number, Category>>((res, c) => {
+        res[c.id] = {
+          ...c,
+          name: getInitials(c.name),
+        }
+        return res
+      }, {}),
+    [categories]
   )
 
   function getInitials(text: string) {
@@ -125,7 +132,10 @@ const Dashboard = () => {
     if (!hasItems) return <NoItemsYet />
 
     return (
-      <div className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pb-22'>
+      <div
+        className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pb-22'
+        onScroll={handleScrollToBottom}
+      >
         {(getItems.data || []).map((item) => (
           <ItemTile
             key={item.id}
@@ -161,10 +171,15 @@ const Dashboard = () => {
     >
       {renderItems()}
 
-      <div className='absolute right-0 bottom-[52px] p-6'>
+      <div
+        className={mc(
+          'absolute right-0 bottom-[52px] w-full max-w-[84px] p-6 transition-[max_width] duration-250',
+          isBottom && 'max-w-full'
+        )}
+      >
         <Button
           icon={<FaPlus className='h-5 w-5' />}
-          className='rounded-full p-2'
+          className='w-full rounded-full p-2'
           onClick={handleAddItem}
           disabled={isLoading}
         />
