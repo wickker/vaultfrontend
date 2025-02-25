@@ -1,16 +1,14 @@
-import { MouseEvent, TouchEvent, useState } from 'react'
+import { MouseEvent, PropsWithChildren, TouchEvent, useState } from 'react'
 import { BsTrash } from 'react-icons/bs'
-import ItemTile from '@/components/Main/Dashboard/ItemTile'
-import { CategoryColor } from '@/utils/constants/enums'
 import { mc } from '@/utils/functions/commons'
 
 const swipeLimit = 140
 
 type SwipeXProps = {
   onClick: () => void
-}
+} & PropsWithChildren
 
-const SwipeX = ({ onClick }: SwipeXProps) => {
+const SwipeX = ({ onClick, children }: SwipeXProps) => {
   const [initial, setInitial] = useState(0)
   const [delta, setDelta] = useState(0)
   const [prevX, setPrevX] = useState(0)
@@ -79,19 +77,14 @@ const SwipeX = ({ onClick }: SwipeXProps) => {
         onTouchMove={(e) => handleMove(e.changedTouches[0].clientX)}
         onTouchEnd={handleTouchEnd}
         className={mc(
-          'bg-white',
+          'rounded-md bg-white',
           isTriggered && 'transition-transform duration-700'
         )}
         style={{
           transform: `translateX(${delta}px)`,
         }}
       >
-        <ItemTile
-          item={{ id: 999, name: 'Test', category_id: 1, created_at: '' }}
-          categoryColor={CategoryColor.GREEN}
-          categoryInitials='D'
-          onEdit={() => {}}
-        />
+        {children}
       </div>
     </div>
   )
