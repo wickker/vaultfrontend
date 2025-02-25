@@ -142,7 +142,7 @@ const Dashboard = () => {
         className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pb-22'
         onScroll={handleScrollToBottom}
       >
-        <SwipeX />
+        <SwipeX onClick={() => console.log('hello')} />
 
         {(getItems.data || []).map((item) => (
           <ItemTile

@@ -1,9 +1,9 @@
 import { MouseEvent } from 'react'
 import { DateTime } from 'luxon'
 import { FiEdit } from 'react-icons/fi'
-import { useNavigate } from 'react-router'
+// import { useNavigate } from 'react-router'
 import { Item } from '@/@types/items'
-import { CategoryColor, Route } from '@/utils/constants/enums'
+import { CategoryColor } from '@/utils/constants/enums'
 
 type ItemTileProps = {
   item: Item
@@ -18,20 +18,19 @@ const ItemTile = ({
   categoryInitials,
   onEdit,
 }: ItemTileProps) => {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
 
   const handleEdit = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     onEdit()
   }
 
-  const handleClickTile = () =>
-    navigate(`${Route.ITEMS}/${btoa(item.id.toString())}`)
+  // const handleClickTile = () => navigate(`${Route.ITEMS}/${btoa(item.id.toString())}`)
 
   return (
     <div
-      className='grid grid-cols-[auto_1fr_auto] items-center gap-x-3 rounded-md bg-white p-4 text-left hover:cursor-pointer'
-      onClick={handleClickTile}
+      className='grid h-[80px] grid-cols-[auto_1fr_auto] items-center gap-x-3 rounded-md bg-white p-4 text-left hover:cursor-pointer'
+      // onClick={handleClickTile}
     >
       <div
         className='flex h-12 w-12 items-center justify-center rounded-full text-xl text-white'

@@ -1,13 +1,36 @@
-import { MouseEvent, useState } from 'react'
+import { MouseEvent, TouchEvent, useState } from 'react'
+import { BsTrash } from 'react-icons/bs'
+import ItemTile from '@/components/Main/Dashboard/ItemTile'
+import { CategoryColor } from '@/utils/constants/enums'
+import { mc } from '@/utils/functions/commons'
 
-const swipeLimit = 120
+const swipeLimit = 140
 
-const SwipeX = () => {
+type SwipeXProps = {
+  onClick: () => void
+}
+
+const SwipeX = ({ onClick }: SwipeXProps) => {
   const [initial, setInitial] = useState(0)
   const [delta, setDelta] = useState(0)
   const [prevX, setPrevX] = useState(0)
+  const [isTriggered, setIsTriggered] = useState(false)
 
-  const handleEnd = () => setPrevX(delta)
+  const handleMouseUp = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.pageX === initial) {
+      onClick()
+      return
+    }
+    setPrevX(delta)
+  }
+
+  const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+    if (e.changedTouches[0].clientX === initial) {
+      onClick()
+      return
+    }
+    setPrevX(delta)
+  }
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     if (e.buttons !== 1) return
@@ -16,37 +39,60 @@ const SwipeX = () => {
 
   const handleMove = (currentX: number) => {
     let delta = initial - currentX
-
     delta = delta * -1
-
     delta = delta + prevX
-
-    if (delta < -swipeLimit) {
-      delta = -swipeLimit
-    }
 
     if (delta > 0) {
       delta = 0
+    }
+
+    if (delta < -swipeLimit) {
+      delta = -500
+      setIsTriggered(true)
+    } else if (isTriggered) {
+      setIsTriggered(false)
     }
 
     setDelta(delta)
   }
 
   return (
-    <div className='grid-stack min-h-[50px] w-full overflow-hidden bg-amber-200'>
-      <div className='h-full w-full bg-purple-300' />
+    <div className='grid-stack min-h-[80px] w-full overflow-hidden rounded-md'>
+      <div className='bg-app-danger relative flex items-center justify-end rounded-md'>
+        <div className='z-10 flex items-center gap-x-2 pr-6 text-sm text-white'>
+          <BsTrash className='h-5 w-5' />
+          Delete
+        </div>
+        <div
+          className={mc(
+            'absolute right-12 h-[1px] w-[1px] rounded-full bg-slate-800 transition-[scale] duration-250',
+            isTriggered && 'scale-[100000%]'
+          )}
+        />
+      </div>
+
       <div
         onMouseDown={(e) => setInitial(e.pageX)}
         onMouseMove={handleMouseMove}
-        onMouseUp={handleEnd}
+        onMouseUp={handleMouseUp}
         onTouchStart={(e) => setInitial(e.changedTouches[0].clientX)}
         onTouchMove={(e) => handleMove(e.changedTouches[0].clientX)}
-        onTouchEnd={handleEnd}
-        className='h-full w-full bg-pink-300'
+        onTouchEnd={handleTouchEnd}
+        className={mc(
+          'bg-white',
+          isTriggered && 'transition-transform duration-700'
+        )}
         style={{
           transform: `translateX(${delta}px)`,
         }}
-      />
+      >
+        <ItemTile
+          item={{ id: 999, name: 'Test', category_id: 1, created_at: '' }}
+          categoryColor={CategoryColor.GREEN}
+          categoryInitials='D'
+          onEdit={() => {}}
+        />
+      </div>
     </div>
   )
 }
