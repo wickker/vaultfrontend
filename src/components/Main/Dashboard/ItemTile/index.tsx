@@ -1,10 +1,12 @@
 import { MouseEvent, useRef, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
 import { FiEdit } from 'react-icons/fi'
 import { useNavigate } from 'react-router'
-import { Item } from '@/@types/items'
+import { GetItemsRequest, Item } from '@/@types/items'
 import { ModalConfirmDelete, SwipeX } from '@/components/commons'
 import { SwipeXRef } from '@/components/commons/SwipeX'
+import useItem from '@/hooks/queries/useItem'
 import { CategoryColor, Route } from '@/utils/constants/enums'
 
 type ItemTileProps = {
@@ -12,6 +14,7 @@ type ItemTileProps = {
   categoryInitials: string
   categoryColor: string
   onEdit: () => void
+  queryKey: readonly ['items', GetItemsRequest]
 }
 
 const ItemTile = ({
@@ -19,11 +22,23 @@ const ItemTile = ({
   categoryColor = CategoryColor.YELLOW,
   categoryInitials,
   onEdit,
+  queryKey,
 }: ItemTileProps) => {
   const [isDeleteConfirmationVisible, setIsDeleteConfirmationVisible] =
     useState(false)
   const navigate = useNavigate()
   const swipeRef = useRef<SwipeXRef>(null)
+  const queryClient = useQueryClient()
+  const { useDeleteItemMutation } = useItem()
+  const deleteItem = useDeleteItemMutation(deleteItemSuccessCb)
+
+  function deleteItemSuccessCb() {
+    swipeRef.current?.reset()
+    queryClient.setQueryData(queryKey, (items: Array<Item>) =>
+      items.filter((i) => i.id !== item?.id)
+    )
+    setIsDeleteConfirmationVisible(false)
+  }
 
   const handleEdit = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
@@ -75,10 +90,10 @@ const ItemTile = ({
 
       <ModalConfirmDelete
         isVisible={isDeleteConfirmationVisible}
-        onConfirm={() => {}}
+        onConfirm={() => deleteItem.mutate(item.id)}
         onClose={handleCancelDelete}
-        text=''
-        // isLoading
+        text='Do you really want to delete this item? All associated records will be deleted as well and this process cannot be undone.'
+        isLoading={deleteItem.isPending}
       />
     </>
   )

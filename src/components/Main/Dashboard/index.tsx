@@ -133,7 +133,7 @@ const Dashboard = () => {
 
     return (
       <div
-        className='bg-app-background scrollbar flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pb-22'
+        className='bg-app-background scrollbar relative flex h-full w-full flex-col gap-y-3 overflow-y-auto px-6 pb-22'
         onScroll={handleScrollToBottom}
       >
         {(getItems.data || []).map((item) => (
@@ -143,6 +143,7 @@ const Dashboard = () => {
             onEdit={() => handleEditItem(item)}
             categoryInitials={categoryInitialsMap[item.category_id].name}
             categoryColor={categoryInitialsMap[item.category_id].color}
+            queryKey={queryKey}
           />
         ))}
       </div>
@@ -173,13 +174,13 @@ const Dashboard = () => {
 
       <div
         className={mc(
-          'absolute right-0 bottom-[52px] w-full max-w-[84px] p-6 transition-[max_width] duration-250',
-          isBottom && 'max-w-full'
+          'absolute right-[28px] bottom-[76px] max-h-[36px] w-full max-w-[36px]',
+          isBottom && 'animate-bounce'
         )}
       >
         <Button
           icon={<FaPlus className='h-5 w-5' />}
-          className='w-full rounded-full p-2'
+          className='rounded-full p-2'
           onClick={handleAddItem}
           disabled={isLoading}
         />
