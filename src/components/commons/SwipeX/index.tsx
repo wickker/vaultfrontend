@@ -27,7 +27,6 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
   ({ onClick, children, onTrigger, onRevertTrigger }, ref) => {
     const [initial, setInitial] = useState(0)
     const [delta, setDelta] = useState(0)
-    const [prevX, setPrevX] = useState(0)
     const [isTriggered, setIsTriggered] = useState(false)
 
     const isEditButton = (e: Element) =>
@@ -35,26 +34,24 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
       (e as Element).matches('svg') ||
       (e as Element).matches('path')
 
-    const handleMouseUp = (e: MouseEvent<HTMLDivElement>) => {
-      if (isEditButton(e.target as Element)) {
-        return
-      }
-      if (e.pageX === initial) {
-        onClick()
-        return
-      }
-      setPrevX(delta)
-    }
+    const handleMouseUp = (e: MouseEvent<HTMLDivElement>) =>
+      handleEnd(e.target as Element, e.pageX)
 
-    const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
-      if (isEditButton(e.target as Element)) {
+    const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) =>
+      handleEnd(e.target as Element, e.changedTouches[0].clientX)
+
+    const handleEnd = (e: Element, x: number) => {
+      if (isEditButton(e)) {
         return
       }
-      if (e.changedTouches[0].clientX === initial) {
+      if (x === initial) {
         onClick()
         return
       }
-      setPrevX(delta)
+
+      if (delta >= -swipeLimit) {
+        setDelta(0)
+      }
     }
 
     const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
@@ -65,7 +62,6 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
     const handleMove = (currentX: number) => {
       let delta = initial - currentX
       delta = delta * -1
-      delta = delta + prevX
 
       if (delta > 0) {
         delta = 0
@@ -75,7 +71,9 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
         delta = -500
         setIsTriggered(true)
         onTrigger()
-      } else if (isTriggered) {
+      }
+
+      if (isTriggered && delta >= -swipeLimit) {
         setIsTriggered(false)
         onRevertTrigger()
       }
@@ -90,7 +88,6 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
           setInitial(0)
           setDelta(0)
           setIsTriggered(false)
-          setPrevX(0)
         },
       }),
       []
@@ -120,7 +117,8 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
           onTouchEnd={handleTouchEnd}
           className={mc(
             'rounded-md bg-white',
-            isTriggered && 'transition-transform duration-700'
+            isTriggered && 'transition-transform duration-700',
+            !delta && 'transition-transform duration-250'
           )}
           style={{
             transform: `translateX(${delta}px)`,
