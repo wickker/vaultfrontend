@@ -59,6 +59,11 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
       handleMove(e.pageX)
     }
 
+    const vibrate = () => {
+      if (!('vibrate' in navigator)) return
+      navigator.vibrate(100)
+    }
+
     const handleMove = (currentX: number) => {
       let delta = initial - currentX
       delta = delta * -1
@@ -70,11 +75,13 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
       if (delta < -swipeLimit) {
         delta = -500
         setIsTriggered(true)
+        vibrate()
         onTrigger()
       }
 
       if (isTriggered && delta >= -swipeLimit) {
         setIsTriggered(false)
+        vibrate()
         onRevertTrigger()
       }
 
