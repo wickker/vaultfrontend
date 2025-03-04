@@ -1,6 +1,7 @@
 import { SignOutButton, useUser } from '@clerk/clerk-react'
 import { BiCategoryAlt } from 'react-icons/bi'
 import { FaChevronRight } from 'react-icons/fa6'
+import { IoCameraOutline } from 'react-icons/io5'
 import { MdLogout } from 'react-icons/md'
 import { RiLoader4Line } from 'react-icons/ri'
 import { useNavigate } from 'react-router'
@@ -33,6 +34,15 @@ const Profile = () => {
               >
                 <BiCategoryAlt className='h-5 w-5' />
                 Categories
+                <FaChevronRight className='h-4 w-4 text-slate-500' />
+              </button>
+
+              <button
+                className='text-app-default bg-app-background grid w-full grid-cols-[auto_1fr_auto] items-center gap-x-3 rounded-md p-4 text-left'
+                onClick={() => navigate(Route.CAMERA)}
+              >
+                <IoCameraOutline className='h-5 w-5' />
+                Camera
                 <FaChevronRight className='h-4 w-4 text-slate-500' />
               </button>
 

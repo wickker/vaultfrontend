@@ -1,4 +1,5 @@
 export const Route = {
+  CAMERA: '/camera',
   CATEGORIES: '/categories',
   DASHBOARD: '/',
   ITEMS: '/items',
