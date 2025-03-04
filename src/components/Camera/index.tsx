@@ -1,7 +1,8 @@
-import { ChangeEvent, useRef, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { Camera as CameraPro, CameraType } from 'react-camera-pro'
 import { FacingMode } from 'react-camera-pro/dist/components/Camera/types'
 import { FaPlus } from 'react-icons/fa'
+import { FaLocationDot } from 'react-icons/fa6'
 import { PiUserSwitch } from 'react-icons/pi'
 import { Button, Page } from '@/components/commons'
 import { useToastContext } from '@/contexts/useToastContext/context'
@@ -13,6 +14,7 @@ const Camera = () => {
   const [numberOfCameras, setNumberOfCameras] = useState(0)
   const [facingMode, setFacingMode] = useState<FacingMode>('environment')
   const { toast } = useToastContext()
+  const [position, setPosition] = useState<GeolocationPosition>()
 
   const handleTakePhoto = () => {
     try {
@@ -37,10 +39,21 @@ const Camera = () => {
     console.log(e.target.files)
   }
 
+  useEffect(() => {
+    let watchId = 0
+    if (navigator.geolocation && !watchId) {
+      watchId = navigator.geolocation.watchPosition((p) => setPosition(p))
+    }
+
+    return () => {
+      if (watchId) navigator.geolocation.clearWatch(watchId)
+    }
+  }, [])
+
   return (
     <Page hideFooter>
-      <div className='grid h-full grid-rows-[auto_1fr_auto] overflow-hidden'>
-        <div className='bg-app-background flex h-[100px] items-center justify-between px-6'>
+      <div className='grid h-full grid-rows-[1fr_auto_1.5fr] overflow-hidden'>
+        <div className='bg-app-background flex items-center justify-between px-6'>
           <Button
             className='rounded-full p-2'
             onClick={() => inputRef.current?.click()}
@@ -72,18 +85,30 @@ const Camera = () => {
           facingMode={facingMode}
         />
 
-        <div className='bg-app-background grid h-[140px] grid-cols-[1fr_auto_1fr]'>
-          <div />
-          <button
-            className='h-14 w-14 self-center justify-self-center rounded-full border-6 border-white bg-slate-500 hover:cursor-pointer'
-            onClick={handleTakePhoto}
-          />
-          {image && (
-            <img
-              className='mr-6 h-[80px] w-[60px] self-center justify-self-end bg-amber-300'
-              src={image}
+        <div className='bg-app-background grid grid-rows-[auto_1fr]'>
+          <div className='text-app-default flex items-center gap-x-3 px-2 py-1 text-xs'>
+            {position && (
+              <>
+                <FaLocationDot />
+                <p>Latitude: {position?.coords.latitude}</p>
+                <p>Longitude: {position?.coords.longitude}</p>
+              </>
+            )}
+          </div>
+
+          <div className='bg-app-background grid grid-cols-[1fr_auto_1fr]'>
+            <div />
+            <button
+              className='h-14 w-14 self-center justify-self-center rounded-full border-6 border-white bg-slate-500 hover:cursor-pointer'
+              onClick={handleTakePhoto}
             />
-          )}
+            {image && (
+              <img
+                className='mr-6 aspect-3/4 w-[60px] self-center justify-self-end bg-amber-300'
+                src={image}
+              />
+            )}
+          </div>
         </div>
       </div>
     </Page>
