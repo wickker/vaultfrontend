@@ -51,10 +51,7 @@ const Camera = () => {
 
         <CameraPro
           ref={camera}
-          errorMessages={{
-            noCameraAccessible:
-              'No camera device accessible. Please connect your camera or try a different browser.',
-          }}
+          errorMessages={{}} // TODO: Check what this does
           aspectRatio={3 / 4}
           numberOfCamerasCallback={setNumberOfCameras}
         />
