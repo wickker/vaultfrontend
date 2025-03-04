@@ -15,6 +15,7 @@ import {
 } from 'react-router'
 import { registerSW } from 'virtual:pwa-register'
 import { AppError, AppLocation } from './@types/commons'
+import Camera from './components/Camera'
 import Categories from './components/Categories'
 import CategoryModal from './components/Categories/CatgeoryModal'
 import { AuthRequired, Toast } from './components/commons'
@@ -31,12 +32,13 @@ import { Route as AppRoute, RelativeRoute } from './utils/constants/enums'
 const AppRoutes = () => {
   const location: Location<AppLocation> = useLocation()
   const previousLocation = location.state?.previousLocation
-  const { DASHBOARD, ITEMS, PROFILE, CATEGORIES } = AppRoute
+  const { DASHBOARD, ITEMS, PROFILE, CATEGORIES, CAMERA } = AppRoute
 
   return (
     <>
       <Routes location={previousLocation || location}>
         <Route path={DASHBOARD} element={<Main />} />
+        <Route path={CAMERA} element={<Camera />} />
         <Route path='*' element={<Fallback />} />
 
         <Route element={<AuthRequired />}>
