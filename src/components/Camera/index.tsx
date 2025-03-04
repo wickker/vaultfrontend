@@ -1,21 +1,36 @@
 import { ChangeEvent, useRef, useState } from 'react'
 import { Camera as CameraPro, CameraType } from 'react-camera-pro'
+import { FacingMode } from 'react-camera-pro/dist/components/Camera/types'
 import { FaPlus } from 'react-icons/fa'
 import { PiUserSwitch } from 'react-icons/pi'
 import { Button, Page } from '@/components/commons'
+import { useToastContext } from '@/contexts/useToastContext/context'
 
 const Camera = () => {
   const camera = useRef<CameraType>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [image, setImage] = useState<string>()
   const [numberOfCameras, setNumberOfCameras] = useState(0)
+  const [facingMode, setFacingMode] = useState<FacingMode>('environment')
+  const { toast } = useToastContext()
 
   const handleTakePhoto = () => {
-    const photo = camera.current?.takePhoto()
-    setImage(photo as string)
+    try {
+      const photo = camera.current?.takePhoto()
+      setImage(photo as string)
+    } catch (e) {
+      toast.error(e as string)
+    }
   }
 
-  const handleSwitchCamera = () => camera.current?.switchCamera()
+  const handleSwitchCamera = () => {
+    try {
+      const mode = camera.current?.switchCamera()
+      if (mode) setFacingMode(mode)
+    } catch (e) {
+      toast.error(e as string)
+    }
+  }
 
   const handleSelectFiles = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return
@@ -51,9 +66,10 @@ const Camera = () => {
 
         <CameraPro
           ref={camera}
-          errorMessages={{}} // TODO: Check what this does
+          errorMessages={{}}
           aspectRatio={3 / 4}
           numberOfCamerasCallback={setNumberOfCameras}
+          facingMode={facingMode}
         />
 
         <div className='bg-app-background grid h-[140px] grid-cols-[1fr_auto_1fr]'>
