@@ -76,9 +76,16 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
     useImperativeHandle(
       ref,
       () => ({
-        reset: () => setIsTriggered(false),
+        reset: () => {
+          setIsTriggered(false)
+          animateSwipe(
+            swipeRef.current,
+            { x: 0, opacity: 1 },
+            { duration: 0.5 }
+          )
+        },
       }),
-      []
+      [animateSwipe, swipeRef]
     )
 
     return (
