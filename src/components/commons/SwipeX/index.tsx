@@ -1,14 +1,12 @@
 import {
   ComponentProps,
   forwardRef,
-  MouseEvent,
   PropsWithChildren,
-  TouchEvent,
   useImperativeHandle,
   useState,
 } from 'react'
+import { motion, useAnimate } from 'motion/react'
 import { BsTrash } from 'react-icons/bs'
-import { mc } from '@/utils/functions/commons'
 
 const swipeLimit = 140
 
@@ -17,85 +15,26 @@ export type SwipeXRef = {
 }
 
 type SwipeXProps = {
-  onClick: () => void
   onTrigger: () => void
   onRevertTrigger: () => void
 } & PropsWithChildren &
   ComponentProps<'div'>
 
 const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
-  ({ onClick, children, onTrigger, onRevertTrigger }, ref) => {
-    const [initial, setInitial] = useState(0)
-    const [delta, setDelta] = useState(0)
+  ({ children, onTrigger, onRevertTrigger }, ref) => {
     const [isTriggered, setIsTriggered] = useState(false)
-
-    const isEditButton = (e: Element) =>
-      (e as Element).matches('button') ||
-      (e as Element).matches('svg') ||
-      (e as Element).matches('path')
-
-    const handleMouseUp = (e: MouseEvent<HTMLDivElement>) =>
-      handleEnd(e.target as Element, e.pageX)
-
-    const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) =>
-      handleEnd(e.target as Element, e.changedTouches[0].clientX)
-
-    const handleEnd = (e: Element, x: number) => {
-      if (isEditButton(e)) {
-        return
-      }
-      if (x === initial) {
-        onClick()
-        return
-      }
-
-      if (delta >= -swipeLimit) {
-        setDelta(0)
-      }
-    }
-
-    const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-      if (e.buttons !== 1) return
-      handleMove(e.pageX)
-    }
+    const [swipeRef, animateSwipe] = useAnimate()
+    const [scaleRef, animateScale] = useAnimate()
 
     const vibrate = () => {
       if (!('vibrate' in navigator)) return
-      navigator.vibrate(100)
-    }
-
-    const handleMove = (currentX: number) => {
-      let delta = initial - currentX
-      delta = delta * -1
-
-      if (delta > 0) {
-        delta = 0
-      }
-
-      if (delta < -swipeLimit) {
-        delta = -500
-        setIsTriggered(true)
-        vibrate()
-        onTrigger()
-      }
-
-      if (isTriggered && delta >= -swipeLimit) {
-        setIsTriggered(false)
-        vibrate()
-        onRevertTrigger()
-      }
-
-      setDelta(delta)
+      navigator.vibrate(5)
     }
 
     useImperativeHandle(
       ref,
       () => ({
-        reset: () => {
-          setInitial(0)
-          setDelta(0)
-          setIsTriggered(false)
-        },
+        reset: () => setIsTriggered(false),
       }),
       []
     )
@@ -107,32 +46,59 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
             <BsTrash className='h-5 w-5' />
             Delete
           </div>
-          <div
-            className={mc(
-              'absolute right-12 h-[1px] w-[1px] rounded-full bg-slate-800 transition-[scale] duration-250',
-              isTriggered && 'scale-[100000%]'
-            )}
+
+          <motion.div
+            ref={scaleRef}
+            className='absolute right-12 h-[1px] w-[1px] rounded-full bg-slate-800'
           />
         </div>
 
-        <div
-          onMouseDown={(e) => setInitial(e.pageX)}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onTouchStart={(e) => setInitial(e.changedTouches[0].clientX)}
-          onTouchMove={(e) => handleMove(e.changedTouches[0].clientX)}
-          onTouchEnd={handleTouchEnd}
-          className={mc(
-            'rounded-md bg-white',
-            isTriggered && 'transition-transform duration-700',
-            !delta && 'transition-transform duration-250'
-          )}
-          style={{
-            transform: `translateX(${delta}px)`,
+        <motion.div
+          className='rounded-md bg-white'
+          drag='x'
+          dragConstraints={{ right: 0 }}
+          dragMomentum={false}
+          dragElastic={{ right: 0, left: 0.5 }}
+          onDrag={(_, info) => {
+            const offset = info.offset.x
+            if (offset < -swipeLimit && !isTriggered) {
+              setIsTriggered(true)
+              animateScale(
+                scaleRef.current,
+                { scale: 600 },
+                { duration: 0.4, ease: 'circIn' }
+              )
+              vibrate()
+              onTrigger()
+            }
+            if (offset >= -swipeLimit && isTriggered) {
+              setIsTriggered(false)
+              vibrate()
+              onRevertTrigger()
+              animateScale(
+                scaleRef.current,
+                { scale: 1 },
+                { duration: 0.3, ease: 'circOut' }
+              )
+            }
           }}
+          onDragEnd={(_, info) => {
+            const offset = info.offset.x
+
+            if (offset < -swipeLimit) {
+              animateSwipe(swipeRef.current, { x: '-100%' }, { duration: 0.2 })
+            } else {
+              animateSwipe(
+                swipeRef.current,
+                { x: 0, opacity: 1 },
+                { duration: 0.5 }
+              )
+            }
+          }}
+          ref={swipeRef}
         >
           {children}
-        </div>
+        </motion.div>
       </div>
     )
   }

@@ -56,12 +56,14 @@ const ItemTile = ({
   return (
     <>
       <SwipeX
-        onClick={handleClickTile}
         onTrigger={() => setIsDeleteConfirmationVisible(true)}
         onRevertTrigger={() => setIsDeleteConfirmationVisible(false)}
         ref={swipeRef}
       >
-        <div className='grid h-[80px] grid-cols-[auto_1fr_auto] items-center gap-x-3 rounded-md bg-white p-4 text-left hover:cursor-pointer'>
+        <div
+          className='grid h-[80px] grid-cols-[auto_1fr_auto] items-center gap-x-3 rounded-md bg-white p-4 text-left hover:cursor-pointer'
+          onClick={handleClickTile}
+        >
           <div
             className='flex h-12 w-12 items-center justify-center rounded-full text-xl text-white'
             style={{
