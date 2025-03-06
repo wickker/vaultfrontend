@@ -40,10 +40,10 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
       if (offset < -swipeLimit && !isTriggered) {
         setIsTriggered(true)
         vibrate()
-        onTrigger()
+        setTimeout(onTrigger, 500)
         animateScale(
           scaleRef.current,
-          { scale: 600 },
+          { scale: 700 },
           { duration: 0.4, ease: 'circIn' }
         )
       }
@@ -83,9 +83,14 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
             { x: 0, opacity: 1 },
             { duration: 0.5 }
           )
+          animateScale(
+            scaleRef.current,
+            { scale: 1 },
+            { duration: 0.3, ease: 'circOut' }
+          )
         },
       }),
-      [animateSwipe, swipeRef]
+      [animateScale, animateSwipe, scaleRef, swipeRef]
     )
 
     return (
@@ -111,6 +116,9 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
           onDrag={handleDrag}
           onDragEnd={handleDragEnd}
           ref={swipeRef}
+          whileDrag={{
+            pointerEvents: 'none',
+          }}
         >
           {children}
         </motion.div>
