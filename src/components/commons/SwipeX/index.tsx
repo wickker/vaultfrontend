@@ -5,7 +5,7 @@ import {
   useImperativeHandle,
   useState,
 } from 'react'
-import { motion, useAnimate } from 'motion/react'
+import { motion, PanInfo, useAnimate } from 'motion/react'
 import { BsTrash } from 'react-icons/bs'
 
 const swipeLimit = 140
@@ -29,6 +29,48 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
     const vibrate = () => {
       if (!('vibrate' in navigator)) return
       navigator.vibrate(5)
+    }
+
+    const handleDrag = (
+      _: MouseEvent | TouchEvent | PointerEvent,
+      info: PanInfo
+    ) => {
+      const offset = info.offset.x
+
+      if (offset < -swipeLimit && !isTriggered) {
+        setIsTriggered(true)
+        vibrate()
+        onTrigger()
+        animateScale(
+          scaleRef.current,
+          { scale: 600 },
+          { duration: 0.4, ease: 'circIn' }
+        )
+      }
+
+      if (offset >= -swipeLimit && isTriggered) {
+        setIsTriggered(false)
+        vibrate()
+        onRevertTrigger()
+        animateScale(
+          scaleRef.current,
+          { scale: 1 },
+          { duration: 0.3, ease: 'circOut' }
+        )
+      }
+    }
+
+    const handleDragEnd = (
+      _: MouseEvent | TouchEvent | PointerEvent,
+      info: PanInfo
+    ) => {
+      const offset = info.offset.x
+
+      if (offset < -swipeLimit) {
+        animateSwipe(swipeRef.current, { x: '-100%' }, { duration: 0.2 })
+        return
+      }
+      animateSwipe(swipeRef.current, { x: 0, opacity: 1 }, { duration: 0.5 })
     }
 
     useImperativeHandle(
@@ -59,42 +101,8 @@ const SwipeX = forwardRef<SwipeXRef, SwipeXProps>(
           dragConstraints={{ right: 0 }}
           dragMomentum={false}
           dragElastic={{ right: 0, left: 0.5 }}
-          onDrag={(_, info) => {
-            const offset = info.offset.x
-            if (offset < -swipeLimit && !isTriggered) {
-              setIsTriggered(true)
-              animateScale(
-                scaleRef.current,
-                { scale: 600 },
-                { duration: 0.4, ease: 'circIn' }
-              )
-              vibrate()
-              onTrigger()
-            }
-            if (offset >= -swipeLimit && isTriggered) {
-              setIsTriggered(false)
-              vibrate()
-              onRevertTrigger()
-              animateScale(
-                scaleRef.current,
-                { scale: 1 },
-                { duration: 0.3, ease: 'circOut' }
-              )
-            }
-          }}
-          onDragEnd={(_, info) => {
-            const offset = info.offset.x
-
-            if (offset < -swipeLimit) {
-              animateSwipe(swipeRef.current, { x: '-100%' }, { duration: 0.2 })
-            } else {
-              animateSwipe(
-                swipeRef.current,
-                { x: 0, opacity: 1 },
-                { duration: 0.5 }
-              )
-            }
-          }}
+          onDrag={handleDrag}
+          onDragEnd={handleDragEnd}
           ref={swipeRef}
         >
           {children}
