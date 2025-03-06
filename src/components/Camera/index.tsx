@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Camera as CameraPro, CameraType } from 'react-camera-pro'
 import { FacingMode } from 'react-camera-pro/dist/components/Camera/types'
 import { FaPlus } from 'react-icons/fa'
@@ -34,11 +34,6 @@ const Camera = () => {
     }
   }
 
-  const handleSelectFiles = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return
-    console.log(e.target.files)
-  }
-
   useEffect(() => {
     let watchId = 0
     if (navigator.geolocation && !watchId) {
@@ -60,13 +55,7 @@ const Camera = () => {
           >
             <FaPlus className='h-5 w-5' />
           </Button>
-          <input
-            ref={inputRef}
-            accept='image/*'
-            type='file'
-            onChange={handleSelectFiles}
-            hidden
-          />
+          <input ref={inputRef} accept='image/*' type='file' hidden />
 
           <Button
             className='h-10 w-10 rounded-full p-2'
