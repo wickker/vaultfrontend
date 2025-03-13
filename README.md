@@ -62,19 +62,19 @@ npm run dev
 yarn dev
 ```
 
-The application should now be running on `http://localhost:3000` (or your configured port).
+The application should now be running on `http://localhost:5173` (or your configured port).
 
 ## Project Structure
 
 ```
 src/
 ├── components/          # React components
-│   ├── Main/           # Main dashboard component
 │   ├── commons/        # Shared components (buttons, inputs, etc.)
-│   ├── Profile/        # User profile related components
-│   ├── Item/           # Item management components
 │   ├── Categories/     # Category management components
-│   └── Fallback/       # Fallback/error components
+│   ├── Fallback/       # Fallback/error components
+│   ├── Item/           # Item management components
+│   ├── Main/           # Main dashboard component
+│   └── Profile/        # User profile related components
 ├── configs/           # Application configurations
 ├── contexts/          # React Context providers
 ├── hooks/             # Custom React hooks

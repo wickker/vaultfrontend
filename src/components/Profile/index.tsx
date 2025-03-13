@@ -28,7 +28,7 @@ const Profile = () => {
 
             <div className='flex w-full flex-col gap-y-4'>
               <button
-                className='text-app-default bg-app-background grid w-full grid-cols-[auto_1fr_auto] items-center gap-x-3 rounded-md p-4 text-left'
+                className='text-app-default bg-app-background grid w-full grid-cols-[auto_1fr_auto] items-center gap-x-3 rounded-md p-4 text-left hover:cursor-pointer'
                 onClick={() => navigate(Route.CATEGORIES)}
               >
                 <BiCategoryAlt className='h-5 w-5' />
@@ -47,7 +47,7 @@ const Profile = () => {
               </button> */}
 
               <SignOutButton>
-                <button className='text-app-default bg-app-background flex w-full items-center gap-x-3 rounded-md p-4'>
+                <button className='text-app-default bg-app-background flex w-full items-center gap-x-3 rounded-md p-4 hover:cursor-pointer'>
                   <MdLogout className='h-5 w-5' />
                   Logout
                 </button>
