@@ -12,6 +12,14 @@ A modern React-based frontend application for managing and organizing items in a
 - 🎨 Category color coding system
 - 🔐 Secure item handling
 
+## PWA Capabilities
+
+- 📱 Installable as a native-like app on mobile and desktop devices
+- 📱 Responsive design that works on all screen sizes
+- 🔄 Automatic updates through service workers
+- 🔐 Secure HTTPS connection
+- 📱 App-like experience with custom icons and splash screens
+
 ## Tech Stack
 
 - React
@@ -67,10 +75,12 @@ src/
 │   ├── Item/           # Item management components
 │   ├── Categories/     # Category management components
 │   └── Fallback/       # Fallback/error components
-├── services/          # API and other services
-├── utils/             # Utility functions
+├── configs/           # Application configurations
+├── contexts/          # React Context providers
 ├── hooks/             # Custom React hooks
 │   └── queries/       # React Query hooks
-├── constants/         # Constants and configuration
-└── assets/           # Static assets (images, fonts)
+├── services/          # API and other services
+└── utils/             # Utilities
+    ├── constants/     # Constants and configuration
+    └── functions/     # Utility functions
 ```
