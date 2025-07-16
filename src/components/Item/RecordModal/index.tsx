@@ -71,9 +71,9 @@ const RecordModal = () => {
   } = useRecord()
   const createRecord = useCreateRecordMutation(createRecordSuccessCb)
   const updateRecord = useUpdateRecordMutation(updateRecordSuccessCb)
-  const deleteRecord = useDeleteRecordMutation(deleteRecordSuccessCB)
+  const deleteRecord = useDeleteRecordMutation(deleteRecordSuccessCb)
 
-  function deleteRecordSuccessCB() {
+  function deleteRecordSuccessCb() {
     queryClient.setQueryData(
       QUERY_KEYS.GET_RECORDS(itemId),
       (data: GetRecordsByItemResponse) => {

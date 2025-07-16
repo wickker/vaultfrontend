@@ -19,9 +19,9 @@ const defaultSettings: Settings = {
 } as const
 
 const permanentSettings = {
-  minLengthLowercase: 0,
-  minLengthUppercase: 0,
-  minLengthNumbers: 0,
+  minLengthLowercase: 1,
+  minLengthUppercase: 1,
+  minLengthNumbers: 1,
 }
 
 type GeneratePasswordProps = {

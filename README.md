@@ -1,6 +1,6 @@
 # Vault Frontend
 
-A modern React-based frontend application for managing and organizing items in a secure vault system.
+A modern React-based frontend application for managing and organizing items in a secure key value system.
 
 ## Features
 
