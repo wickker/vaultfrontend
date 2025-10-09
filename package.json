@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.22.12",
+    "@cloudcare/browser-rum": "^3.2.38",
     "@hookform/resolvers": "^4.0.0",
     "@tailwindcss/vite": "^4.0.0",
     "@tanstack/react-query": "^5.66.0",
