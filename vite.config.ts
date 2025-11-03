@@ -17,6 +17,14 @@ export default defineConfig(({ mode }: UserConfig) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
+        workbox: {
+          runtimeCaching: [
+            {
+              urlPattern: /^https?.*/,
+              handler: 'NetworkOnly',
+            },
+          ],
+        },
         devOptions: {
           enabled: true,
         },
