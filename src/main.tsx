@@ -15,7 +15,7 @@ datafluxRum.init({
   version: '1.0.0',
   service: 'browser',
   sessionSampleRate: 100,
-  sessionReplaySampleRate: 70,
+  sessionReplaySampleRate: 100,
   compressIntakeRequests: true,
   trackUserInteractions: true,
   traceType: TraceType.DDTRACE,

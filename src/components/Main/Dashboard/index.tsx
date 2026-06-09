@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import { useUser } from '@clerk/clerk-react'
+import { datafluxRum } from '@cloudcare/browser-rum'
 import { FaPlus } from 'react-icons/fa6'
 import { RiLoader4Line } from 'react-icons/ri'
 import { useLocation, useNavigate } from 'react-router'
@@ -32,6 +34,8 @@ const Dashboard = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { isBottom, handleScrollToBottom } = useScrollToBottom()
+  const { user } = useUser()
+  datafluxRum.setUser({ email: user?.emailAddresses?.[0].emailAddress || '' })
 
   // query
   const request = {

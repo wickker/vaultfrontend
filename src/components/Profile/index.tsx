@@ -1,4 +1,5 @@
 import { SignOutButton, useUser } from '@clerk/clerk-react'
+import { datafluxRum } from '@cloudcare/browser-rum'
 import { BiCategoryAlt } from 'react-icons/bi'
 import { FaChevronRight } from 'react-icons/fa6'
 import { MdLogout } from 'react-icons/md'
@@ -47,7 +48,10 @@ const Profile = () => {
               </button> */}
 
               <SignOutButton>
-                <button className='text-app-default bg-app-background flex w-full items-center gap-x-3 rounded-md p-4 hover:cursor-pointer'>
+                <button
+                  className='text-app-default bg-app-background flex w-full items-center gap-x-3 rounded-md p-4 hover:cursor-pointer'
+                  onClick={() => datafluxRum.clearUser()}
+                >
                   <MdLogout className='h-5 w-5' />
                   Logout
                 </button>
